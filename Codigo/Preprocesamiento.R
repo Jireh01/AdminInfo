@@ -38,6 +38,12 @@ programas <- quitarTildes(programas)
 
 plot(mtcars)
 
+# eliminar los espacios en blanco de DEPARTAMENTO_FILIAL
+carnes[carnes$DEPARTAMENTO_FILIAL == '',4] <- NA
+
+
+
+
 
 '''
 #TODO:

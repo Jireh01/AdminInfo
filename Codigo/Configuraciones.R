@@ -25,6 +25,7 @@ conexion
 dbGetInfo(driver)
 dbIsValid(conexion)
 
+### PROBANDO
 ## Creando tabla TEST
 tablaUno <- c(1:20)
 tablaDos <- c(21:40)
