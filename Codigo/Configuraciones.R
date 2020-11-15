@@ -28,13 +28,16 @@ dbIsValid(conexion)
 ## Creando tabla TEST
 tablaUno <- c(1:20)
 tablaDos <- c(21:40)
-prueba <- data.frame(tablaUno,tablaDos)
-head(prueba)
+test <- data.frame(tablaUno,tablaDos)
+head(test)
 
 ## Escribiendo tabla TEST a la base de datos
 if(!dbExistsTable(conexion,"TEST"))
-    dbWriteTable(conexion,name="TEST",value=prueba,append=TRUE)
+    dbWriteTable(conexion,name="TEST", value=test, append=TRUE)
 
 ## Probar la tabla TEST subida a la base de datos
-probar <- dbReadTable(conexion,"TEST")
-head(probar)
+test <- dbReadTable(conexion,"TEST")
+head(test)
+
+## Borrar la tabla TEST
+dbRemoveTable(conexion,name="TEST")

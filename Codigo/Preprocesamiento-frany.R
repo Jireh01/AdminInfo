@@ -1,10 +1,10 @@
 ## Cargamos el csv
 library(tidyverse)
 
-## Leyendo tabla, activando las cabeceras y definiendo el separados como el simbolo "|"
-licenciamiento <- read.table("Otros/LicenciamientoInstitucional.csv", header = TRUE, sep="|")
-carnes <- read.table("Otros/CarnesUniversitarios2018.csv", header = TRUE, sep="|")
-programas <- read.table("Otros/ProgramasDeUniversidades.csv", header = TRUE, sep="|")
+## Leyendo tabla, activ ando los headers y definiendo el separados como el simbolo "|"
+licenciamiento <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/LicenciamientoInstitucional.csv", header = TRUE, sep="|")
+carnes <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/CarnesUniversitarios2018.csv", header = TRUE, sep="|")
+programas <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/ProgramasDeUniversidades.csv", header = TRUE, sep="|")
 
 # Revisando si los tipos de valores corresponden a la cabecera
 for (i in colnames(licenciamiento)){
@@ -19,17 +19,13 @@ for (i in colnames(programas)){
 	cat(i, ": " ,class(programas[[i]]), "\nEjemplo:",programas[[i]][1], sep = "", end = "\n\n")
 }
 
-# Quitamos las tildes para que no haya problemas con la base de datos en linea
-tildes <- c('Á', 'É', 'Í', 'Ó', 'Ú')
-reemplazo <- c('A', 'E', 'I', 'O', 'U')
+a <- c('A', 'E', 'I', 'O', 'U')
+b <- c('Á', 'É', 'Í', 'Ó', 'Ú')
 
-
-
+x <- ('AAA')
+str_replace_all(x, a, b)
 
 '''
-#QUITAR TILDES
-
-
 ## Reemplazando el simbolo "|" con una coma para su transformacion mas sencilla a dataframe
 lic <- ("Otros/LicenciamientoInstitucional.csv")
 x <- readLines(lic)
