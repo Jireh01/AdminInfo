@@ -7,27 +7,41 @@ carnes <- read.table("Otros/CarnesUniversitarios2018.csv", header = TRUE, sep="|
 programas <- read.table("Otros/ProgramasDeUniversidades.csv", header = TRUE, sep="|")
 
 # Revisando si los tipos de valores corresponden a la cabecera
-for (i in colnames(licenciamiento)){
-	cat(i, ": " ,class(licenciamiento[[i]]), "\nEjemplo:",licenciamiento[[i]][1], sep = "", end = "\n\n")
+revisarValores <- function(dataFrame){
+	for (i in colnames(dataFrame)){
+		cat(i, ": " ,class(dataFrame[[i]]), "\nEjemplo:",dataFrame[[i]][1], sep = "", end = "\n\n")
+	}
 }
 
-for (i in colnames(carnes)){
-	cat(i, ": " ,class(carnes[[i]]), "\nEjemplo:",carnes[[i]][1], sep = "", end = "\n\n")
+revisarValores(licenciamiento)
+revisarValores(carnes)
+revisarValores(programas)
+
+# Quitamos las tildes para que no haya problemas con la base de datos en linea con esta funcion
+quitarTildes <- function(dataFrame){
+	conTilde <- c("Á", "É", "Í", "Ó", "Ú", "á", "é", "í", "ó", "ú")
+	sinTilde <- c("A", "E", "I", "O", "U", "a", "e", "i", "o", "u")
+
+	for (i in seq_along(conTilde)){
+		for (j in colnames(dataFrame)){
+			dataFrame[[j]] <- str_replace_all(dataFrame[[j]], conTilde[i], sinTilde[i])
+		}
+	}
+	return(dataFrame)
 }
 
-for (i in colnames(programas)){
-	cat(i, ": " ,class(programas[[i]]), "\nEjemplo:",programas[[i]][1], sep = "", end = "\n\n")
-}
+licenciamiento <- quitarTildes(licenciamiento)
+carnes <- quitarTildes(carnes)
+programas <- quitarTildes(programas)
 
-# Quitamos las tildes para que no haya problemas con la base de datos en linea
-tildes <- c('Á', 'É', 'Í', 'Ó', 'Ú')
-reemplazo <- c('A', 'E', 'I', 'O', 'U')
+# Reemplazamos los valores en blanco con NA
 
-
+plot(mtcars)
 
 
 '''
-#QUITAR TILDES
+#TODO:
+#ASK FOR MODELADO (FK? E-R?)
 
 
 ## Reemplazando el simbolo "|" con una coma para su transformacion mas sencilla a dataframe
