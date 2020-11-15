@@ -7,7 +7,7 @@ Trabajo final del curso de Administración de la Informacion de la UPC
   - Renzo Mondongon
 
 # Por hacer:
-  - Base de datos
+  - 
 
 
 
