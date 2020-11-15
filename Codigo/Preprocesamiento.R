@@ -19,8 +19,8 @@ revisarValores(programas)
 
 # Quitamos las tildes para que no haya problemas con la base de datos en linea con esta funcion
 quitarTildes <- function(dataFrame){
-	conTilde <- c("Á", "É", "Í", "Ó", "Ú", "á", "é", "í", "ó", "ú")
-	sinTilde <- c("A", "E", "I", "O", "U", "a", "e", "i", "o", "u")
+	conTilde <- c("Á", "É", "Í", "Ó", "Ú", "Ü", "á", "é", "í", "ó", "ú", "ü")
+	sinTilde <- c("A", "E", "I", "O", "U", "U", "a", "e", "i", "o", "u", "ü")
 
 	for (i in seq_along(conTilde)){
 		for (j in colnames(dataFrame)){
@@ -34,21 +34,42 @@ licenciamiento <- quitarTildes(licenciamiento)
 carnes <- quitarTildes(carnes)
 programas <- quitarTildes(programas)
 
-# Reemplazamos los valores en blanco con NA
+# reemplazar los espacios en blanco de los dataFrames por NA
+removerBlancos <- function(dataFrame){
+	for (i in colnames(dataFrame)){
+		dataFrame[[i]][dataFrame[[i]] == ''] <- NA
+	}
+	return(dataFrame)
+}
 
-plot(mtcars)
+licenciamiento <- removerBlancos(licenciamiento)
+carnes <- removerBlancos(carnes)
+programas <- removerBlancos(programas)
 
-# eliminar los espacios en blanco de DEPARTAMENTO_FILIAL
-carnes[carnes$DEPARTAMENTO_FILIAL == '',4] <- NA
+# remover las lineas con mas de 2 NA
+licenciamiento <- licenciamiento[rowSums(is.na(licenciamiento)) < 2, ]
+carnes <- carnes[rowSums(is.na(carnes)) < 2, ]
+programas <- programas[rowSums(is.na(programas)) < 2, ]
+
+# quitar " S.A.C."" y " S.A."" en los nombres de licenciamiento y programa
+
+# Guardamos los dataframes limpios
+write.csv(licenciamiento, file="Otros/licenciamiento.csv")
+write.csv(carnes, file="Otros/carnes.csv")
+write.csv(programas, file="Otros/programas.csv")
 
 
 
 
 
-'''
+
+
+
+####
 #TODO:
-#ASK FOR MODELADO (FK? E-R?)
-
+# ASK FOR MODELADO (FK? E-R?)
+# ASK los outliers para nuestras bases de datos
+# ASK Informe automático
 
 ## Reemplazando el simbolo "|" con una coma para su transformacion mas sencilla a dataframe
 lic <- ("Otros/LicenciamientoInstitucional.csv")
@@ -57,5 +78,3 @@ y <- gsub("[|]",",", x)
 cat(y, file="nombre.csv", sep="\n")
 limpio <- read.csv("nombre.csv")
 head(limpio)
-
-'''
