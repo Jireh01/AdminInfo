@@ -53,12 +53,11 @@ programas <- programas[rowSums(is.na(programas)) < 2, ]
 
 # quitar " S.A.C."" y " S.A."" en los nombres de licenciamiento y programa
 
+
 # Guardamos los dataframes limpios
 write.csv(licenciamiento, file="Otros/licenciamiento.csv")
 write.csv(carnes, file="Otros/carnes.csv")
 write.csv(programas, file="Otros/programas.csv")
-
-
 
 
 
