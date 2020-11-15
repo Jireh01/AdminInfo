@@ -22,8 +22,6 @@ for (i in colnames(programas)){
 a <- c('A', 'E', 'I', 'O', 'U')
 b <- c('Á', 'É', 'Í', 'Ó', 'Ú')
 
-x <- ('AAA')
-str_replace_all(x, a, b)
 
 '''
 ## Reemplazando el simbolo "|" con una coma para su transformacion mas sencilla a dataframe
@@ -33,5 +31,4 @@ y <- gsub("[|]",",", x)
 cat(y, file="nombre.csv", sep="\n")
 limpio <- read.csv("nombre.csv")
 head(limpio)
-
 '''
