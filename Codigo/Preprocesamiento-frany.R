@@ -1,5 +1,6 @@
 ## Cargamos el csv
 library(tidyverse)
+library(stringr)
 
 ## Leyendo tabla, activ ando los headers y definiendo el separados como el simbolo "|"
 licenciamiento <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/LicenciamientoInstitucional.csv", header = TRUE, sep="|")
@@ -36,8 +37,29 @@ licenciamiento <- quitarTildes(licenciamiento)
 carnes <- quitarTildes(carnes)
 programas <- quitarTildes(programas)
 
-# Reemplazamos los valores en blanco con NA
 
+quitarSAC <- function(dataFrame) {
+	for (i in colnames(dataFrame)) {
+		# dataFrame[[i]] <- rev(dataFrame[[i]])
+		# paste(dataFrame[[i]], collapse='')
+		if (str_extract(dataFrame[[i]], ' S.A.C.') != NA){
+			
+		} else if (str_extract(dataFrame[[i]], ' S.A.') != NA) {
+
+		}
+	}
+	return(dataFrame)
+}
+
+# Reemplazamos los valores en blanco con NA
+a <- 'abc def arg'
+b <- 'arg'
+c <- a - b
+a <- str_extract(a, ' .g.t.d')
+a
+b <- rev(a)
+paste(b, collapse='')
+b
 removerBlancos <- function(dataFrame){
 	for (i in colnames(dataFrame)){
 		dataFrame[[i]][dataFrame[[i]] == ''] <- NA
