@@ -1,3 +1,9 @@
+# install.packages("xlsx")                                         # Install xlsx R package
+library("xlsx") 
+
+install.packages("readxl")                                       # Install readxl R package
+library("readxl")
+
 ## Cargamos el csv
 library(tidyverse)
 library(stringr)
@@ -6,6 +12,8 @@ library(stringr)
 licenciamiento <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/LicenciamientoInstitucional.csv", header = TRUE, sep="|")
 carnes <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/CarnesUniversitarios2018.csv", header = TRUE, sep="|")
 programas <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/ProgramasDeUniversidades.csv", header = TRUE, sep="|")
+
+licenciamientoEx <- read_excel("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/Licenciamiento Institucional_5.xls")
 
 # Revisando si los tipos de valores corresponden a la cabecera
 for (i in colnames(licenciamiento)){
@@ -143,6 +151,9 @@ head(licenciamiento)
 write.csv(licenciamiento,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/licenciamiento.csv')
 write.csv(programas,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/programas.csv')
 write.csv(carnes,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/carnes.csv')
+
+# todavia no funciona
+write.xlsx(licenciamientoEx,'C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/lic.xlsx', row.names = FALSE, append = TRUE, sheetName = "licc")
 
 # Consultas
 #- universidades que antes tenian licencia y ahora ya no
