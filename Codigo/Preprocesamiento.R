@@ -19,8 +19,8 @@ revisarValores(programas)
 
 # Quitamos las tildes para que no haya problemas con la base de datos en linea con esta funcion
 quitarTildes <- function(dataFrame){
-	conTilde <- c("Á", "É", "Í", "Ó", "Ú", "Ü", "á", "é", "í", "ó", "ú", "ü")
-	sinTilde <- c("A", "E", "I", "O", "U", "U", "a", "e", "i", "o", "u", "ü")
+	conTilde <- c("Á", "É", "Í", "Ó", "Ú", "Ñ", "Ü", "á", "é", "í", "ó", "ú", "ü")
+	sinTilde <- c("A", "E", "I", "O", "U", "N", "U", "a", "e", "i", "o", "u", "ü")
 
 	for (i in seq_along(conTilde)){
 		for (j in colnames(dataFrame)){
