@@ -1,7 +1,7 @@
 # install.packages("xlsx")                                         # Install xlsx R package
 library("xlsx") 
 
-install.packages("readxl")                                       # Install readxl R package
+# install.packages("readxl")                                       # Install readxl R package
 library("readxl")
 
 ## Cargamos el csv
@@ -16,17 +16,15 @@ programas <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la in
 licenciamientoEx <- read_excel("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/Licenciamiento Institucional_5.xls")
 
 # Revisando si los tipos de valores corresponden a la cabecera
-for (i in colnames(licenciamiento)){
-	cat(i, ": " ,class(licenciamiento[[i]]), "\nEjemplo:",licenciamiento[[i]][1], sep = "", end = "\n\n")
+revisarValores <- function(dataFrame){
+	for (i in colnames(dataFrame)){
+		cat(i, ": " ,class(dataFrame[[i]]), "\nEjemplo:",dataFrame[[i]][1], sep = "", end = "\n\n")
+	}
 }
-
-for (i in colnames(carnes)){
-	cat(i, ": " ,class(carnes[[i]]), "\nEjemplo:",carnes[[i]][1], sep = "", end = "\n\n")
-}
-
-for (i in colnames(programas)){
-	cat(i, ": " ,class(programas[[i]]), "\nEjemplo:",programas[[i]][1], sep = "", end = "\n\n")
-}
+revisarValores(licenciamiento)
+revisarValores(carnes)
+revisarValores(programas)
+revisarValores(licenciamientoEx)
 
 # Quitamos las tildes y Ñs para que no haya problemas con la base de datos en linea con esta funcion
 quitarTildes <- function(dataFrame){
@@ -44,6 +42,7 @@ quitarTildes <- function(dataFrame){
 licenciamiento <- quitarTildes(licenciamiento)
 carnes <- quitarTildes(carnes)
 programas <- quitarTildes(programas)
+licenciamientoEx <- quitarTildes(licenciamientoEx)
 
 
 quitarSAC <- function(dataFrame) {
@@ -60,14 +59,6 @@ quitarSAC <- function(dataFrame) {
 }
 
 # Reemplazamos los valores en blanco con NA
-a <- 'abc def arg'
-b <- 'arg'
-c <- a - b
-a <- str_extract(a, ' .g.t.d')
-a
-b <- rev(a)
-paste(b, collapse='')
-b
 removerBlancos <- function(dataFrame){
 	for (i in colnames(dataFrame)){
 		dataFrame[[i]][dataFrame[[i]] == ''] <- NA
@@ -78,11 +69,13 @@ removerBlancos <- function(dataFrame){
 licenciamiento <- removerBlancos(licenciamiento)
 carnes <- removerBlancos(carnes)
 programas <- removerBlancos(programas)
+licenciamientoEx <- removerBlancos(licenciamientoEx)
 
 # remover las lineas con mas de 2 NA
 licenciamiento <- licenciamiento[rowSums(is.na(licenciamiento)) < 2, ]
 carnes <- carnes[rowSums(is.na(carnes)) < 2, ]
 programas <- programas[rowSums(is.na(programas)) < 2, ]
+licenciamientoEx <- licenciamientoEx[rowSums(is.na(licenciamientoEx)) < 2, ]
 
 
 # quitar " S.A.C."" y " S.A."" en los nombres de licenciamiento y programa
