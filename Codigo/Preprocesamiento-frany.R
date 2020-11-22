@@ -88,10 +88,14 @@ programas <- programas[rowSums(is.na(programas)) < 2, ]
 carnesEx <- carnesEx[rowSums(is.na(carnesEx)) < 2, ]
 
 
-write.csv(licenciamiento,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/licenciamiento.csv')
-write.csv(programas,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/programas.csv')
+head(licenciamiento)
+head(programas)
+head(carnesEx)
+
+write.csv(licenciamiento,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/licenciamiento.csv')
+write.csv(programas,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/programas.csv')
 # write.csv(carnes,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/carnes.csv')
-write.xlsx(carnesEx, file = "carnesEx.xlsx", row.names = TRUE, append = TRUE, sheetName = "carnesEx")
+write.xlsx(carnesEx, file = "C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/carnesE.xlsx", row.names = TRUE, append = TRUE, sheetName = "carnes")
 
 # Consultas
 #- universidades que antes tenian licencia y ahora ya no
@@ -154,9 +158,6 @@ write.xlsx(carnesEx, file = "carnesEx.xlsx", row.names = TRUE, append = TRUE, sh
 # licenciamiento$NOMBRE<- str_replace_all(licenciamiento$NOMBRE,"UNIVERSIDAD PERUANA DE CIENCIAS E INFORMATICA S.A.C.","UNIVERSIDAD PERUANA DE CIENCIAS E INFORMATICA")
 # licenciamiento$NOMBRE<- str_replace_all(licenciamiento$NOMBRE,"UNIVERSIDAD PRIVADA PERUANO ALEMANA S.A.C.","UNIVERSIDAD PRIVADA PERUANO ALEMANA")
 # licenciamiento$NOMBRE<- str_replace_all(licenciamiento$NOMBRE,"UNIVERSIDAD PERUANA DE LAS AMERICAS S.A.C.","UNIVERSIDAD PERUANA DE LAS AMERICAS")
-
-### OTRA MANERA SERIA INVIERITNEDO LOS ARREGLOS DE NOMBRES Y TODOS LOS QUE COMIENCEN POR '.' HASTA 'S' eliminar
-head(licenciamiento)
 
 # eliminar los espacios en blanco de DEPARTAMENTO_FILIAL
 # carnes[carnes$DEPARTAMENTO_FILIAL == '',4] <- NA
