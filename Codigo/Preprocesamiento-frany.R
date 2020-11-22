@@ -44,7 +44,6 @@ quitarTildes <- function(dataFrame){
 licenciamiento <- quitarTildes(licenciamiento)
 #carnes <- quitarTildes(carnes)
 programas <- quitarTildes(programas)
-#licenciamientoEx <- quitarTildes(licenciamientoEx)
 carnesEx <- quitarTildes(carnesEx)
 
 quitarSAC <- function(dataFrame) {
@@ -66,17 +65,8 @@ programas <- quitarSAC(programas)
 head(licenciamiento)
 head(programas)
 head(carnesEx)
-
-prueba <- "Hillside S.A.C."
 #prueba <- gsub("\\s*\\w*$", "", prueba)
-if (sub(prueba, pattern = " S.A.C.", replacement = "") == sub(prueba, pattern = " S.A.C.", replacement = "")){
-	prueba <- sub(prueba, pattern = " S.A.C.", replacement = "")
-}
-prueba
 
-sub(prueba, pattern = " S.A.C.", replacement = "")
-sub(prueba, pattern = " S.A.", replacement = "")
-prueba
 # Reemplazamos los valores en blanco con NA
 removerBlancos <- function(dataFrame){
 	for (i in colnames(dataFrame)){
@@ -88,14 +78,12 @@ removerBlancos <- function(dataFrame){
 licenciamiento <- removerBlancos(licenciamiento)
 #carnes <- removerBlancos(carnes)
 programas <- removerBlancos(programas)
-#licenciamientoEx <- removerBlancos(licenciamientoEx)
 carnesEx <- removerBlancos(carnesEx)
 
 # remover las lineas con mas de 2 NA
 licenciamiento <- licenciamiento[rowSums(is.na(licenciamiento)) < 2, ]
 #carnes <- carnes[rowSums(is.na(carnes)) < 2, ]
 programas <- programas[rowSums(is.na(programas)) < 2, ]
-#licenciamientoEx <- licenciamientoEx[rowSums(is.na(licenciamientoEx)) < 2, ]
 carnesEx <- carnesEx[rowSums(is.na(carnesEx)) < 2, ]
 
 
@@ -110,6 +98,8 @@ write.xlsx(carnesEx, file = "carnesEx.xlsx", row.names = TRUE, append = TRUE, sh
 #- Cuantos estudiantes estan en universidades no licenciadas de ICA
 #- Cuantos estudiantes de universidades privadas estan estudiando CC
 #- Cuantas universidades que cuentan con postgrado se encuentran fuera de LIMA
+
+###################################################################################################
 
 # quitar " S.A.C."" y " S.A."" en los nombres de licenciamiento y programa
 	# una manera MUY FEA de hacerlo (por mientras)
