@@ -52,7 +52,8 @@ quitarSAC <- function(dataFrame) {
 		# paste(dataFrame[[i]], collapse='')
 		if (sub(dataFrame[[i]], pattern = " S.A.C.", replacement = "") == sub(dataFrame[[i]], pattern = " S.A.C.", replacement = "")){
 			dataFrame[[i]] <- sub(dataFrame[[i]], pattern = " S.A.C.", replacement = "")
-		} else if (sub(dataFrame[[i]], pattern = " S.A.", replacement = "") == sub(dataFrame[[i]], pattern = " S.A.", replacement = "")) {
+		} 
+		if (sub(dataFrame[[i]], pattern = " S.A.", replacement = "") == sub(dataFrame[[i]], pattern = " S.A.", replacement = "")) {
 			dataFrame[[i]] <- sub(dataFrame[[i]], pattern = " S.A.", replacement = "")
 		}
 	}
