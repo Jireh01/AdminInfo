@@ -14,6 +14,7 @@ carnes <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la infor
 programas <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/ProgramasDeUniversidades.csv", header = TRUE, sep="|")
 
 licenciamientoEx <- read_excel("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/Licenciamiento Institucional_5.xls")
+carnesEx <- read_excel("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/Carnes Universitarios 2018.xls")
 
 # Revisando si los tipos de valores corresponden a la cabecera
 revisarValores <- function(dataFrame){
@@ -25,6 +26,7 @@ revisarValores(licenciamiento)
 revisarValores(carnes)
 revisarValores(programas)
 revisarValores(licenciamientoEx)
+revisarValores(carnesEx)
 
 # Quitamos las tildes y Ñs para que no haya problemas con la base de datos en linea con esta funcion
 quitarTildes <- function(dataFrame){
@@ -40,10 +42,10 @@ quitarTildes <- function(dataFrame){
 }
 
 licenciamiento <- quitarTildes(licenciamiento)
-carnes <- quitarTildes(carnes)
+#carnes <- quitarTildes(carnes)
 programas <- quitarTildes(programas)
-licenciamientoEx <- quitarTildes(licenciamientoEx)
-
+#licenciamientoEx <- quitarTildes(licenciamientoEx)
+carnesEx <- quitarTildes(carnesEx)
 
 quitarSAC <- function(dataFrame) {
 	for (i in colnames(dataFrame)) {
@@ -67,16 +69,17 @@ removerBlancos <- function(dataFrame){
 }
 
 licenciamiento <- removerBlancos(licenciamiento)
-carnes <- removerBlancos(carnes)
+#carnes <- removerBlancos(carnes)
 programas <- removerBlancos(programas)
-licenciamientoEx <- removerBlancos(licenciamientoEx)
+#licenciamientoEx <- removerBlancos(licenciamientoEx)
+carnesEx <- removerBlancos(carnesEx)
 
 # remover las lineas con mas de 2 NA
 licenciamiento <- licenciamiento[rowSums(is.na(licenciamiento)) < 2, ]
-carnes <- carnes[rowSums(is.na(carnes)) < 2, ]
+#carnes <- carnes[rowSums(is.na(carnes)) < 2, ]
 programas <- programas[rowSums(is.na(programas)) < 2, ]
-licenciamientoEx <- licenciamientoEx[rowSums(is.na(licenciamientoEx)) < 2, ]
-
+#licenciamientoEx <- licenciamientoEx[rowSums(is.na(licenciamientoEx)) < 2, ]
+carnesEx <- carnesEx[rowSums(is.na(carnesEx)) < 2, ]
 
 # quitar " S.A.C."" y " S.A."" en los nombres de licenciamiento y programa
 	# una manera MUY FEA de hacerlo (por mientras)
@@ -143,10 +146,8 @@ head(licenciamiento)
 
 write.csv(licenciamiento,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/licenciamiento.csv')
 write.csv(programas,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/programas.csv')
-write.csv(carnes,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/carnes.csv')
-
-# todavia no funciona
-write.xlsx(licenciamientoEx,'C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/lic.xlsx', row.names = FALSE, append = TRUE, sheetName = "licc")
+# write.csv(carnes,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/carnes.csv')
+write.xlsx(carnesEx, file = "Otros/carnesEx.xlsx", row.names = TRUE, append = TRUE, sheetName = "carnesEx")
 
 # Consultas
 #- universidades que antes tenian licencia y ahora ya no
