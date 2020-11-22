@@ -28,6 +28,9 @@ revisarValores(programas)
 revisarValores(licenciamientoEx)
 revisarValores(carnesEx)
 
+# convertir el periodo de licenciamiento a numero
+licenciamiento$PERIODO_LICENCIAMIENTO <- as.integer(licenciamiento$PERIODO_LICENCIAMIENTO)
+
 # Quitamos las tildes y Ñs para que no haya problemas con la base de datos en linea con esta funcion
 quitarTildes <- function(dataFrame){
 	conTilde <- c("Á", "É", "Í", "Ó", "Ú", "Ñ", "á", "é", "í", "ó", "ú", "ñ")
@@ -95,7 +98,7 @@ head(carnesEx)
 write.csv(licenciamiento,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/licenciamiento.csv')
 write.csv(programas,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/programas.csv')
 # write.csv(carnes,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/carnes.csv')
-write.xlsx(carnesEx, file = "C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/carnesE.xlsx", row.names = TRUE, append = TRUE, sheetName = "carnes")
+write.xlsx(carnesEx, file = "C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/carnesEx.xlsx", row.names = TRUE, append = TRUE, sheetName = "carnes")
 
 ###################################################################################################
 
