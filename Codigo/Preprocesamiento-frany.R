@@ -97,13 +97,6 @@ write.csv(programas,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la i
 # write.csv(carnes,file='C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Semana 11/Trabajo Final Adminfo/Otros/carnes.csv')
 write.xlsx(carnesEx, file = "C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/carnesE.xlsx", row.names = TRUE, append = TRUE, sheetName = "carnes")
 
-# Consultas
-#- universidades que antes tenian licencia y ahora ya no
-#- universidades que cuentan con 6 años de licenciamiento y pertenecen al departamento de lima
-#- Cuantos estudiantes estan en universidades no licenciadas de ICA
-#- Cuantos estudiantes de universidades privadas estan estudiando CC
-#- Cuantas universidades que cuentan con postgrado se encuentran fuera de LIMA
-
 ###################################################################################################
 
 # quitar " S.A.C."" y " S.A."" en los nombres de licenciamiento y programa
