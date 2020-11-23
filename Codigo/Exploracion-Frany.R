@@ -77,7 +77,7 @@ head(q12)
 g1 <- pie(table(licenciamiento$ESTADO_LICENCIAMIENTO), main = "Licenciamiento de Universidades")
 
 # Cuantas universidades por departamento hay
-g2 <- ggplot(licenciamiento, aes(licenciamiento$NOMBRE, licenciamiento$DEPARTAMENTO_LOCAL)) + geom_jitter() + labs(y = "Departamentos", x = "Universidades")
+g2 <- ggplot(licenciamiento, aes(licenciamiento$NOMBRE, licenciamiento$DEPARTAMENTO_LOCAL)) + geom_point() + labs(y = "Departamentos", x = "Universidades")
 g2
 
 # Porcentaje de periodos de licenciamiento
@@ -93,8 +93,18 @@ aux2 <- carnesEx %>% group_by(NOMBRE_PROGRAMA) %>% summarise(suma_canres = sum(C
 g5 <- ggplot(aux2, aes(y=NOMBRE_PROGRAMA, x=suma_canres, fill=NOMBRE_PROGRAMA)) + theme_minimal()+geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de carnes por Universidad')
 g5
 
-# periodo de licenciamiento con algo mas ????
+# periodo de licenciamiento segun tipo de gestion
 aux3 <- licenciamiento %>% group_by(TIPO_GESTION) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
 g6 <- ggplot(aux3, aes(y=TIPO_GESTION,x=suma_lic, fill=TIPO_GESTION)) + geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Publico vs Privado',x='Numero de años totales en licenciamiento', title='Comparativa entre numero de licenciamientos entre Público y Privado')
 g6
+
+# Periodo de licenciamiento segun cada departamento del Perú
+aux4 <- licenciamiento %>% group_by(DEPARTAMENTO_LOCAL) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
+g7 <- ggplot(aux4, aes(y=DEPARTAMENTO_LOCAL, x=suma_lic, fill=DEPARTAMENTO_LOCAL)) + theme_minimal() + geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Departamentos', x='Periodo de licenciamiento', title='Periodo de Licenciamiento según Departamento')
+g7
+
+# Periodo de licenciamiento segun cada universidad
+aux5 <- licenciamiento %>% group_by(NOMBRE) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO)) 
+g8 <- ggplot(aux5, aes(y=NOMBRE, x=suma_lic, fill=NOMBRE)) + theme_minimal() + geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Universidades', x='Periodo de licenciamiento', title='Periodo de Licenciamiento según Departamento')
+g8
 
