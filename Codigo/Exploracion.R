@@ -43,6 +43,34 @@ carnesEx$Cant_Carnes <- as.integer(carnesEx$Cant_Carnes)
 q6 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% filter(carnesEx$TIPO_GESTION == 'PRIVADO', carnesEx$Cant_Carnes > 10)
 head(q6)
 
+# Todos lo programas que tiene la UPC 
+q7 <- programas %>% select(CODIGO_ENTIDAD, ESTADO_LICENCIAMIENTO, PERIODO_LICENCIAMIENTO, DENOMINACION_PROGRAMA) %>% filter(programas$NOMBRE == 'UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS')
+head(q7)
+
+
+# Universidades que no tienen un departamento filial en su registro y cuentan con informatica como curso
+q8 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% filter(carnesEx$NOMBRE_CLASE_PROGRAMA == 'INFORMATICA', carnesEx$NOMBRE_FILIAL == '[NO ESPECIFICADO]')
+head(q8)
+
+# Cursos de universidades de Junin que cuentan con Maestria 
+q9 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE, TIPO_GESTION, DENOMINACION_PROGRAMA) %>% filter(programas$DEPARTAMENTO_FILIAL == 'JUNIN', programas$NIVEL_ACADEMICO == 'MAESTRIA', programas$TIPO_GESTION == 'PRIVADO')
+head(q9)
+
+#- Cuantas universidades que cuentan con postgrado se encuentran fuera de LIMA
+q10 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE) %>% filter(programas$DEPARTAMENTO_LOCAL != 'LIMA', programas$TIPO_NIVEL_ACADEMICO == 'POSGRADO')
+head(q10)
+head(count(q10))
+
+# Cursos que tienen menos del promedio de carnes (estudiantes) y que son de la carrera de derecho
+q11 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, Cant_Carnes) %>% filter(carnesEx$Cant_Carnes < mean(carnesEx$Cant_Carnes),carnesEx$NOMBRE_PROGRAMA == 'DERECHO')
+head(q11)
+
+#- universidades que cuentan con 6 años de licenciamiento y pertenecen al departamento de lima
+q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', licenciamiento$PERIODO_LICENCIAMIENTO == 6, licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA')
+head(q12)
+
+
+
 
 # Graficos
 
