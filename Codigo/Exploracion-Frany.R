@@ -90,8 +90,11 @@ g4
 
 # Cantidad de carnes por Carreras (se ve muy mal)
 aux2 <- carnesEx %>% group_by(NOMBRE_PROGRAMA) %>% summarise(suma_canres = sum(Cant_Carnes))
-g5 <- ggplot(aux2, aes(y=NOMBRE_PROGRAMA, x=suma_canres, fill=NOMBRE_PROGRAMA)) + theme_minimal()+geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de carnes por Universidad')
+g5 <- ggplot(aux2, aes(y=NOMBRE_PROGRAMA, x=suma_canres, fill=NOMBRE_PROGRAMA)) + theme_minimal()+geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de carnes por Universidad')
 g5
 
-aux3 <- programas %>% group_by(TIPO_GESTION) %>% summarise(suma_unis = count(NOMBRE))
-count(programas$NOMBRE)
+# periodo de licenciamiento con algo mas ????
+aux3 <- licenciamiento %>% group_by(TIPO_GESTION) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
+g6 <- ggplot(aux3, aes(y=TIPO_GESTION,x=suma_lic, fill=TIPO_GESTION)) + geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Publico vs Privado',x='Numero de años totales en licenciamiento', title='Comparativa entre numero de licenciamientos entre Público y Privado')
+g6
+
