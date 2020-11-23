@@ -53,5 +53,5 @@ g1 <- pie(table(licenciamiento$ESTADO_LICENCIAMIENTO), main = "Licenciamiento de
 g2 <- ggplot(licenciamiento, aes(licenciamiento$NOMBRE, licenciamiento$DEPARTAMENTO_LOCAL)) + geom_jitter() + labs(y = "Departamentos", x = "Universidades")
 g2
 
-# 
-g3 <- ggplot()
+# Porcentaje de periodos de licenciamiento
+g3 <- pie(table(licenciamiento$PERIODO_LICENCIAMIENTO), main = "Periodo de licenciamiento de Universidades")
