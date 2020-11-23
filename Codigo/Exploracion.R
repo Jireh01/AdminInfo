@@ -1,4 +1,5 @@
 library("dplyr")
+library("ggplot2")
 
 # carnesExplo <- read_excel("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/carnesEx.xlsx")
 # licenciamientoExplo <- read.table("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/licenciamiento.csv")
@@ -37,5 +38,20 @@ head(q4)
 q5 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL, TIPO_GESTION) %>% filter(licenciamiento$DEPARTAMENTO == 'ICA', licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA DENEGADA')
 head(q5)
 
+# Universidades privadas que tienen mas de 10 carnets 
 carnesEx$Cant_Carnes <- as.integer(carnesEx$Cant_Carnes)
-q6 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% filter()
+q6 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% filter(carnesEx$TIPO_GESTION == 'PRIVADO', carnesEx$Cant_Carnes > 10)
+head(q6)
+
+
+# Graficos
+
+# grafico de pie de licenciamiento de universidades
+g1 <- pie(table(licenciamiento$ESTADO_LICENCIAMIENTO), main = "Licenciamiento de Universidades")
+
+# Cuantas universidades por departamento hay
+g2 <- ggplot(licenciamiento, aes(licenciamiento$NOMBRE, licenciamiento$DEPARTAMENTO_LOCAL)) + geom_jitter() + labs(y = "Departamentos", x = "Universidades")
+g2
+
+# 
+g3 <- ggplot()
