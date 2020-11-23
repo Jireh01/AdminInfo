@@ -66,10 +66,10 @@ q11 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, Cant_Carnes) %>% filter(c
 head(q11)
 
 #- universidades que cuentan con 6 años de licenciamiento y pertenecen al departamento de lima
-q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', licenciamiento$PERIODO_LICENCIAMIENTO == 6, licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA')
+q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', licenciamiento$PERIODO_LICENCIAMIENTO == 6, licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA') %>% group_by(NOMBRE)
 head(q12)
 
-
+q13 <- programas %>% select()
 
 
 # Graficos
@@ -83,3 +83,4 @@ g2
 
 # Porcentaje de periodos de licenciamiento
 g3 <- pie(table(licenciamiento$PERIODO_LICENCIAMIENTO), main = "Periodo de licenciamiento de Universidades")
+
