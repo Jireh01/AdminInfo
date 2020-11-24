@@ -69,11 +69,21 @@ head(q11)
 q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', licenciamiento$PERIODO_LICENCIAMIENTO == 6, licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA') %>% group_by(NOMBRE)
 head(q12)
 
-q13 <- quantile(carnesEx$Cant_Carnes, probs = seq(0, 1, 0.25), na.rm = TRUE, names = TRUE, type = 7)
+q13 <- quantile(carnesEx$Cant_Carnes, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE, type = 7)
 q13
 
-q14 <-  quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = seq(0, 1, 0.25), na.rm = TRUE, names = TRUE, type = 7)
+q14 <-  quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE, type = 7)
 q14
+
+q15 <- licenciamiento %>% group_by(DEPARTAMENTO_LOCAL) %>% summarise(percent70 = quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = .7))
+view(q15)
+head(q15)
+
+
+
+view(iris)
+
+
 
 
 ######### Graficos ##########
