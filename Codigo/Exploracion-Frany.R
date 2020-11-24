@@ -75,7 +75,7 @@ q13
 q14 <- quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE, type = 7)
 q14
 
-q15 <- licenciamiento %>% group_by(DEPARTAMENTO_LOCAL) %>% summarise(percent70 = quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = .5))
+q15 <- licenciamiento %>% group_by(DEPARTAMENTO_LOCAL) %>% summarise(percent70 = quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = .5)) 
 view(q15)
 head(q15)
 
@@ -88,7 +88,6 @@ q17 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% filter(
 head(q17)
 
 view(iris)
-
 
 
 
