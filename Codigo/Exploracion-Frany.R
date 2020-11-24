@@ -38,9 +38,9 @@ head(q4)
 q5 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL, TIPO_GESTION) %>% filter(licenciamiento$DEPARTAMENTO == 'ICA', licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA DENEGADA')
 head(q5)
 
-# Universidades privadas que tienen mas de 10 carnets 
+# Clases privadas que tienen mas de 10 carnets 
 carnesEx$Cant_Carnes <- as.integer(carnesEx$Cant_Carnes)
-q6 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% filter(carnesEx$TIPO_GESTION == 'PRIVADO', carnesEx$Cant_Carnes > 10)
+q6 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% filter(carnesEx$TIPO_GESTION == 'PRIVADO', carnesEx$Cant_Carnes > 100)
 head(q6)
 
 # Todos lo programas que tiene la UPC 
