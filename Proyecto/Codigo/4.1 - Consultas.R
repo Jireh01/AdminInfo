@@ -29,10 +29,22 @@ estadistica_carnes <- resumen_sunedu %>% summarise(Cantidad = n(),
 estadistica_carnes
 
 # Consultas
-# 1. Universidades que tienen la licencia denegada segun la lista mas actualizada de la SUNEDU 
-query <- licenciamiento %>%
-						select(NOMBRE, ESTADO_LICENCIAMIENTO) %>%
-						filter(ESTADO_LICENCIAMIENTO == 'LICENCIA DENEGADA')
+# 1. Lista de universidades que tienen programas de Doctorado que se encuentren
+#		licenciadas segun la lista de licenciamiento de Abril del 2020. Mostrar tambien
+#		la cantidad de programas y alumnos que tiene cada una respectivamente.
+query <- programas %>%
+					filter(NIVEL_ACADEMICO == "DOCTORADO") %>%
+					group_by(NOMBRE,NIVEL_ACADEMICO) %>%
+					summarize(PROGRAMAS = n()) %>%
+					inner_join(licenciamiento %>%
+											filter(ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+											select(NOMBRE, ESTADO_LICENCIAMIENTO),
+								by=c("NOMBRE"="NOMBRE")) %>%
+					inner_join(carnes %>%
+										group_by(NOMBRE_UNIVERSIDAD) %>%
+										summarize(CANTIDAD_CARNES = sum(Cant_Carnes)),
+								by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+					select(NOMBRE, NIVEL_ACADEMICO, ESTADO_LICENCIAMIENTO, PROGRAMAS, ALUMNOS = CANTIDAD_CARNES)	
 head(query)
 
 # 2. Universidades que tienen la licencia otorgada segun la SUNEDU y le quedan mas de 7 años de licencia
@@ -47,10 +59,20 @@ query <- programas %>%
 					filter(TIPO_GESTION == 'PUBLICO', DENOMINACION_PROGRAMA == 'INGENIERIA MECANICA')
 head(query)
 
-# 4. Universidades que cuentan con programas de doctorado en el sector publico
-query <- programas %>%
-					select(NOMBRE, TIPO_GESTION, NIVEL_ACADEMICO) %>% 
-					filter(TIPO_GESTION == 'PUBLICO', NIVEL_ACADEMICO == 'DOCTORADO')
+# 4. Cantidad de universidades publicas que tienen licenciatura fuera de lima
+#		y su cantidad respectiva de estudiantes que no sean de ingenieria ordenado de
+#		mayor a menor cantidad de estudiantes
+query <- licenciamiento %>% 
+						filter(TIPO_GESTION == "PUBLICO", 
+								ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA",
+								DEPARTAMENTO_LOCAL != "LIMA") %>%
+						select(NOMBRE,TIPO_GESTION,ESTADO_LICENCIAMIENTO,DEPARTAMENTO_LOCAL) %>%
+						inner_join(carnes %>%
+										filter(NOMBRE_CLASE_PROGRAMA != "SALUD")%>%
+										group_by(NOMBRE_UNIVERSIDAD, ) %>%
+										summarize(ESTUDIANTES = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						arrange(desc(ESTUDIANTES))
 head(query)
 
 # 5. Universidades de ICA que no cuentan con licencia por SUNEDU actualmente
@@ -147,13 +169,15 @@ query <- carnes %>%
 				summarize(Cantidad = sum(Cant_Carnes))
 head(query)
 
-# 17. Mostrar lista de universidades y la cantidad de programas posgrado que tienen y ordenar ascendentemente
-query <- programas %>%
-					filter(TIPO_NIVEL_ACADEMICO == "POSGRADO") %>%
-					group_by(NOMBRE) %>%
-					summarize(PROGRAMAS= n()) %>%
-					arrange(PROGRAMAS)
-head(query)
+#17. Funcion para determinar el estado de licenciamiento de una universidad segun la lista de Abril 2020
+alumnosTotal <-function(nombre){
+	query <- licenciamiento %>%
+							filter(NOMBRE == nombre) %>%
+							select(NOMBRE, ESTADO_LICENCIAMIENTO)
+	return(query)
+}
+query <- alumnosTotal("UNIVERSIDAD CESAR VALLEJO")
+query
 
 # 18. Cantidad de alumnos de universidades cuyas licencias fueron revocadas
 query <- licenciamiento %>%
@@ -204,7 +228,7 @@ query <- licenciamiento %>%
 						filter(ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
 						select(NOMBRE,DEPARTAMENTO_LOCAL,ESTADO_LICENCIAMIENTO) %>%
 						inner_join(carnes %>%
-											group_by(NOMBRE_UNIVERSIDAD, ) %>%
+											group_by(NOMBRE_UNIVERSIDAD) %>%
 											summarize(ESTUDIANTES = sum(Cant_Carnes)),
 									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
 						arrange(DEPARTAMENTO_LOCAL)
@@ -219,60 +243,52 @@ query <- carnes %>%
 head(query)
 
 #25. Funcion para saber cuantos estudiantes en total tiene una universidad
-
-query <- carnes %>%
-				filter(NOMBRE_UNIVERSIDAD == "UNIVERSIDAD NACIONAL MAYOR DE SAN MARCOS") %>%
-				select(NOMBRE_UNIVERSIDAD, Cant_Carnes) %>%
-				
-
-alumnosTotal <-function(x){
-
-  q<-Metropolitano$Estacion %>% select(Nombre, Ubicacion, Estado) %>%
-                            arrange(Nombre)
-
-  return(q)
+alumnosTotal <-function(nombre){
+	query <- carnes %>%
+					filter(NOMBRE_UNIVERSIDAD == nombre) %>%
+					select(NOMBRE_UNIVERSIDAD, Cant_Carnes) %>%
+					group_by(NOMBRE_UNIVERSIDAD) %>%
+					summarize(n = sum(Cant_Carnes))
+	return(query)
 }
+query <- alumnosTotal("UNIVERSIDAD ALAS PERUANAS")
+query
+
+# 26. Mostrar lista de universidades y la cantidad de programas posgrado que tienen y ordenar ascendentemente
+query <- programas %>%
+					filter(TIPO_NIVEL_ACADEMICO == "POSGRADO") %>%
+					group_by(NOMBRE) %>%
+					summarize(PROGRAMAS= n()) %>%
+					arrange(PROGRAMAS)
+head(query)
+
+# 27. Universidades que cuentan con programas de doctorado en el sector publico
+query <- programas %>%
+					select(NOMBRE, TIPO_GESTION, NIVEL_ACADEMICO) %>% 
+					filter(TIPO_GESTION == 'PUBLICO', NIVEL_ACADEMICO == 'DOCTORADO')
+head(query)
+
+# 28. Universidades que tienen la licencia denegada segun la lista mas actualizada de la SUNEDU 
+query <- licenciamiento %>%
+						select(NOMBRE, ESTADO_LICENCIAMIENTO) %>%
+						filter(ESTADO_LICENCIAMIENTO == 'LICENCIA DENEGADA')
+head(query)
+
+# 29. Universidades privadas que tienen licenciamiento segun la lista de Abril 2020 y que tienen mas del
+#		promedio de programas academicos. Mostrar el estado de licenciamiento y cantidad de programas
+#		academicos. Tambien, ordenar por mayor cantidad de programas y como segunda prioridad alfabeticamente.
+query <- licenciamiento %>%
+						filter(TIPO_GESTION == "PRIVADO",
+							ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
+						inner_join(programas %>%
+											group_by(NOMBRE) %>%
+											summarize(PROGRAMAS = n()) %>%
+											filter(PROGRAMAS > mean(PROGRAMAS)),
+									by=c("NOMBRE"="NOMBRE")) %>%
+						arrange(desc(PROGRAMAS), NOMBRE)
+head(query)
+
+# 30. 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-q15 <- licenciamiento %>% group_by(DEPARTAMENTO_LOCAL) %>% 
-                summarise(percent70 = quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = .5)) 
-view(q15)
-head(q15)
-
-# Universidades que cuentan con 0 años de licencia
-q16 <- licenciamiento %>% select(NOMBRE) %>% 
-            filter(licenciamiento$PERIODO_LICENCIAMIENTO == min(licenciamiento$PERIODO_LICENCIAMIENTO))
-view(q16)
-
-
-q17 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% 
-                    filter(carnesEx$Cant_Carnes < max(carnesEx$Cant_Carnes))
-head(q17)
-
-
-# Universidades que tienen la licencia segun la SUNEDU y le quedan mas de 7 años de licencia
-q2 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% 
-            filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', 
-                licenciamiento$PERIODO_LICENCIAMIENTO >= 7)
-grafico <- ggplot(q2, aes(y=DEPARTAMENTO_LOCAL, x=NOMBRE)) + theme_minimal() + geom_point(color="red",size=3) + labs(y="Departamentos", x="Universidades", title="")
-grafico
-
-####
-group_nombre<-inner_join(programas%>%group_by(NOMBRE),licenciamiento%>%group_by(NOMBRE),by="NOMBRE")%>%select(NOMBRE,PERIODO_LICENCIAMIENTO.x)
-group_programa<-programas%>%group_by(NOMBRE)%>%summarise(total_programas=n())
-
-View(inner_join(group_nombre,group_programa, by="NOMBRE"))

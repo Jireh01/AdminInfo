@@ -1,6 +1,6 @@
 library(tidyverse)
 library(corrplot)
-library("ggplot2")
+library(ggplot2)
 
 vinos <- read.csv("Datasets/0-Descargados/winequality-red.csv")
 
