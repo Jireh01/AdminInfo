@@ -2,24 +2,24 @@ library(tidyverse)
 library(corrplot)
 library("ggplot2")
 
-vinos <- read.csv("C:/Users/Francesco/Documents/UPC/Ciclo 5/Admin de la informacion/Trabajo Final/Trabajo-Final-Adminfo/Otros/winequality-red.csv")
+vinos <- read.csv("Datasets/0-Descargados/winequality-red.csv")
 
 v <- cor(vinos)
 corrplot(v)
-
+view(vinos)
 #################### Regresion Lineal ####################
 # Regresion lineal (en el shiny las variables las pone el usuario)
 R = lm(vinos$fixed.acidity~vinos$pH)
 # ploteal los puntos
 plot(vinos$pH, vinos$fixed)
 # Te muestra la linea de regresion
-abline(R)
+abline(R, col="red", lwd=2)
 
 ############### Regresion polinomial #####################
 # para ver la regresion del fixed.acidity en relacion a las otras 3 variables
 # citric.acid, density, pH
 
-ids <- sample(1:nrow(vinosKnn),size=nrow(vinosKnn)*0.7,replace = FALSE)
+ids <- sample(1:nrow(vinos),size=nrow(vinos)*0.7,replace = FALSE)
 
 entrenamiento <- vinos[ids, c(1,3,8,9)]
 probar <- vinos[-ids, c(1,3,8,9)]
@@ -55,7 +55,7 @@ test.labels <- vinos[-dat,1]
 knn <- knn(train=train, test=test, cl=train.labels, k = 10, prob=TRUE)
 
 accuracy.fin <- 100 * sum(train.labels == knn)/NROW(test.labels)
-
+accuracy.fin
 
 
 ################### KMeans ##################
@@ -63,7 +63,7 @@ corrplot(v)
 plot(vinos$free.sulfur.dioxide, vinos$sulphates)
 df <- data.frame(vinos$free.sulfur.dioxide, vinos$sulphates)
 
-kmeans <- kmeans(df, 3)
+kmeans <- kmeans(df, 7)
 plot(df, col = kmeans$cluster)
 points(kmeans$centers, col = 1:2, pch = 8, cex = 2)
 
@@ -91,12 +91,11 @@ s.corcircle(componentes[,c(1,4)])
 
 ################### SVM #####################
 library(e1071)
-data(iris)
 
-dff <- cbind(vinos$free.sulfur.dioxide, vinos$sulphates)
-data(dff)
-m <- svm(sulphates~., data = dff)
-plot(m, cats)
+dff <- data.frame(vinos$quality, vinos$free.sulfur.dioxide)
+
+m <- svm(vinos.quality~., data = dff)
+plot(m, dff)
 
 ## more than two variables: fix 2 dimensions
 m2 <- svm(Species~., data = iris)
