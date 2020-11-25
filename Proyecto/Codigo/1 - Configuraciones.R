@@ -37,3 +37,26 @@ head(test)
 
 ## Borrar la tabla TEST
 dbRemoveTable(conexion,name="TEST")
+
+## Cargamos las tablas hechas en preprocesamiento
+licenciamiento <- read.csv("Datasets/2-Preprocesados/licenciamiento.csv")
+carnes <- read.csv("Datasets/2-Preprocesados/carnes.csv")
+programas <- read.csv("Datasets/2-Preprocesados/programas.csv")
+resumen_sunedu <- read.csv("Datasets/3-Generado/resumen_sunedu.csv")
+vinos <- read.csv("Datasets/0-Descargados/winequality-red.csv")
+
+## Subiendo las tablas creadas en preprocesamiento al servidor
+if(!dbExistsTable(conexion,"licenciamiento"))
+    dbWriteTable(conexion,name="licenciamiento", value=licenciamiento, append=TRUE)
+
+if(!dbExistsTable(conexion,"carnes"))
+    dbWriteTable(conexion,name="carnes", value=carnes, append=TRUE)
+
+if(!dbExistsTable(conexion,"programas"))
+    dbWriteTable(conexion,name="programas", value=programas, append=TRUE)
+
+if(!dbExistsTable(conexion,"resumen_sunedu"))
+    dbWriteTable(conexion,name="resumen_sunedu", value=resumen_sunedu, append=TRUE)
+
+if(!dbExistsTable(conexion,"vinos"))
+    dbWriteTable(conexion,name="vinos", value=vinos, append=TRUE)

@@ -125,7 +125,27 @@ query <- licenciamiento %>%
 							ESTADO_LICENCIAMIENTO != "LICENCIA OTORGADA")
 head(query)
 
-# 15. Cantidad de alumnos de universidades cuyas licencias fueron revocadas
+# 15. Universidades que tienen mas del promedio de programas totales y menos del promedio de cantidad de carnes
+query <- resumen_sunedu %>%
+						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>%
+						filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL), CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
+head(query)
+
+# 16. Cantidad de alumnos de universidades publicas en la carrera de Salud
+query <- carnes %>%
+				filter(TIPO_GESTION=="PUBLICO", NOMBRE_CLASE_PROGRAMA=="SALUD") %>%
+				summarize(Cantidad = sum(Cant_Carnes))
+head(query)
+
+# 17. Mostrar lista de universidades y la cantidad de programas posgrado que tienen y ordenar ascendentemente
+query <- programas %>%
+					filter(TIPO_NIVEL_ACADEMICO == "POSGRADO") %>%
+					group_by(NOMBRE) %>%
+					summarize(PROGRAMAS= n()) %>%
+					arrange(PROGRAMAS)
+head(query)
+
+# 18. Cantidad de alumnos de universidades cuyas licencias fueron revocadas
 query <- licenciamiento %>%
 						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
 						filter(ESTADO_LICENCIAMIENTO == "LICENCIA DENEGADA") %>%
@@ -136,18 +156,82 @@ query <- licenciamiento %>%
 						summarize(TOTAL = sum(CANTIDAD_ALUMNOS))
 head(query)
 
-# 16. Universidades que tienen mas del promedio de programas totales y menos del promedio de cantidad de carnes
-query <- resumen_sunedu %>%
-						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>%
-						filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL), CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
+#19. Departamento que mas universidades con licencia denegada tiene que no sea Lima
+query <- licenciamiento %>% 
+						filter(DEPARTAMENTO_LOCAL != "LIMA", ESTADO_LICENCIAMIENTO!="LICENCIA OTORGADA") %>%
+						group_by(DEPARTAMENTO_LOCAL) %>%
+						summarize(UNIVERSIDADES = n()) %>%
+						filter(UNIVERSIDADES == first(licenciamiento %>% 
+												filter(DEPARTAMENTO_LOCAL != "LIMA", ESTADO_LICENCIAMIENTO!="LICENCIA OTORGADA") %>%
+												group_by(DEPARTAMENTO_LOCAL) %>%
+												summarize(UNIVERSIDADES = n()) %>%
+												summarize (MAX = max(UNIVERSIDADES))))
 head(query)
 
-# 17. Cantidad de alumnos de universidades publicas en la carrera de Salud
+#20. Cantidad de programas pregrado y posgrado en Lima
+query <- programas %>%
+					filter(DEPARTAMENTO_LOCAL=="LIMA") %>%
+					group_by(DEPARTAMENTO_LOCAL,TIPO_NIVEL_ACADEMICO) %>%
+					summarize(CANTIDAD = n()) 
+head(query)
+
+#21. Estudiantes en total de cada departamento del Peru que supera el promedio de estudiantes por departamento
 query <- carnes %>%
-				filter(TIPO_GESTION=="PUBLICO", NOMBRE_CLASE_PROGRAMA=="SALUD") %>%
-				summarize(Cantidad = sum(Cant_Carnes))
-
+				group_by(DEPARTAMENTO_FILIAL) %>%
+				summarize(CANTIDAD = sum(Cant_Carnes)) %>%
+				filter(CANTIDAD > mean(CANTIDAD))
 head(query)
+
+#22. Lista de universidades que tienen la menor cantidad de periodo de funcionamiento (que no sea 0)
+query <- licenciamiento %>% 
+						filter(PERIODO_LICENCIAMIENTO != 0) %>%
+						select(NOMBRE, PERIODO_LICENCIAMIENTO) %>%
+						filter(PERIODO_LICENCIAMIENTO == min(PERIODO_LICENCIAMIENTO))
+head(query)
+
+#23. Lista de universidades licenciadas y la cantidad de sus estudiantes de cada departamento
+query <- licenciamiento %>%
+						filter(ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+						select(NOMBRE,DEPARTAMENTO_LOCAL,ESTADO_LICENCIAMIENTO) %>%
+						inner_join(carnes %>%
+											group_by(NOMBRE_UNIVERSIDAD, ) %>%
+											summarize(ESTUDIANTES = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						arrange(DEPARTAMENTO_LOCAL)
+head(query)
+
+#24. Cantidad de estudiantes de Ingenieria que no son de Lima
+query <- carnes %>%
+				filter(grepl("INGENIERIA",NOMBRE_PROGRAMA), DEPARTAMENTO_FILIAL!="LIMA" ) %>%
+				group_by(NOMBRE_PROGRAMA) %>%
+				summarize(CANT = sum(Cant_Carnes)) %>%
+				summarize(CANTIDAD = sum(CANT))
+head(query)
+
+#25. Funcion para saber cuantos estudiantes en total tiene una universidad
+
+query <- carnes %>%
+				filter(NOMBRE_UNIVERSIDAD == "UNIVERSIDAD NACIONAL MAYOR DE SAN MARCOS") %>%
+				select(NOMBRE_UNIVERSIDAD, Cant_Carnes) %>%
+				
+
+alumnosTotal <-function(x){
+
+  q<-Metropolitano$Estacion %>% select(Nombre, Ubicacion, Estado) %>%
+                            arrange(Nombre)
+
+  return(q)
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -168,10 +252,6 @@ view(q16)
 q17 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% 
                     filter(carnesEx$Cant_Carnes < max(carnesEx$Cant_Carnes))
 head(q17)
-
-
-
-
 
 
 # Universidades que tienen la licencia segun la SUNEDU y le quedan mas de 7 años de licencia

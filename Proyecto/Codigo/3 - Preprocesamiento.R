@@ -48,7 +48,6 @@ quitarSAC <- function(dataFrame,i) {
 	}
 	return(dataFrame)
 }
-
 carnes <- quitarSAC(carnes,3)
 licenciamiento <- quitarSAC(licenciamiento,3)
 programas <- quitarSAC(programas,3)
@@ -67,12 +66,9 @@ licenciamiento$CODIGO_ENTIDAD <- strtoi(licenciamiento$CODIGO_ENTIDAD)
 licenciamiento$PERIODO_LICENCIAMIENTO <- strtoi(licenciamiento$PERIODO_LICENCIAMIENTO)
 programas$CODIGO_ENTIDAD <- strtoi(programas$CODIGO_ENTIDAD)
 programas$PERIODO_LICENCIAMIENTO <- strtoi(programas$PERIODO_LICENCIAMIENTO)
-programas$CODIGO_CLASE_PROGRAMA_N2 <- stroi(programas$CODIGO_CLASE_PROGRAMA_N2)
+programas$CODIGO_CLASE_PROGRAMA_N2 <- strtoi(programas$CODIGO_CLASE_PROGRAMA_N2)
 
 # Guardamos los dataframes limpios
 write.csv(licenciamiento, file="Datasets/2-Preprocesados/licenciamiento.csv", row.names=F)
 write.csv(carnes, file="Datasets/2-Preprocesados/carnes.csv", row.names=F)
 write.csv(programas, file="Datasets/2-Preprocesados/programas.csv", row.names=F)
-
-
-
