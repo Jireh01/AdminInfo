@@ -9,14 +9,24 @@ resumen_sunedu <- read.csv("Datasets/3-Generado/resumen_sunedu.csv")
 
 # Estadistica Descriptiva
 # Media, Maximo, Minimo, Cuartil y Percentil de los Programas Universitarios en total de cada universidad
-estadistica <- resumen_sunedu %>% summarise(Cantidad = n(),
+estadistica_programas <- resumen_sunedu %>% summarise(Cantidad = n(),
 			Media = mean(PROGRAMAS_TOTAL, na.rm = TRUE),
 			Maximo = max(PROGRAMAS_TOTAL, na.rm = TRUE),
 			Minimo = min(PROGRAMAS_TOTAL, na.rm = TRUE),
 			Q25 = quantile(PROGRAMAS_TOTAL, .25, na.rm = TRUE),
 			Q50 = quantile(PROGRAMAS_TOTAL, .50, na.rm = TRUE),
 			Q75 = quantile(PROGRAMAS_TOTAL, .75, na.rm = TRUE),)
-estadistica
+estadistica_programas
+
+# Media, Maximo, Minimo, Cuartil y Percentil de los Programas Universitarios en total de cada universidad
+estadistica_carnes <- resumen_sunedu %>% summarise(Cantidad = n(),
+			Media = mean(CANTIDAD_CARNES, na.rm = TRUE),
+			Maximo = max(CANTIDAD_CARNES, na.rm = TRUE),
+			Minimo = min(CANTIDAD_CARNES, na.rm = TRUE),
+			Q25 = quantile(CANTIDAD_CARNES, .25, na.rm = TRUE),
+			Q50 = quantile(CANTIDAD_CARNES, .50, na.rm = TRUE),
+			Q75 = quantile(CANTIDAD_CARNES, .75, na.rm = TRUE),)
+estadistica_carnes
 
 # Consultas
 # 1. Universidades que tienen la licencia denegada segun la lista mas actualizada de la SUNEDU 

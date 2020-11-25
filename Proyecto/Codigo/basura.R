@@ -14,7 +14,8 @@ q3 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE, NOMBRE_FILIAL, NIVEL_ACADEMIC
             filter(programas$TIPO_GESTION == 'PUBLICO', 
             programas$DENOMINACION_PROGRAMA == 'INGENIERIA MECANICA')
 head(q3)
-grafico <- ggplot(q3, aes(y=NIVEL_ACADEMICO, x=NOMBRE_FILIAL)) + theme_minimal() + geom_point(color="red",size=3) + labs(y="Departamentos", x="Universidades", title="")
+grafico <- ggplot(q3, aes(y=NIVEL_ACADEMICO, x=NOMBRE_FILIAL)) + theme_minimal() + 
+                geom_point(color="red",size=3) + labs(y="Departamentos", x="Universidades", title="")
 grafico
 
  
@@ -28,8 +29,10 @@ q9 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE, TIPO_GESTION, DENOMINACION_PR
                 filter(programas$DEPARTAMENTO_FILIAL == 'JUNIN', programas$NIVEL_ACADEMICO == 'MAESTRIA', 
                         programas$TIPO_GESTION == 'PRIVADO')
 head(q9)
+grafico <- ggplot2()
+
 
 q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% 
-                filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA',                      licenciamiento$PERIODO_LICENCIAMIENTO == 6, 
+                filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', licenciamiento$PERIODO_LICENCIAMIENTO == 6, 
                         licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA') %>% group_by(NOMBRE)
 head(q12)

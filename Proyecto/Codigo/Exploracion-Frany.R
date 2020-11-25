@@ -84,7 +84,7 @@ head(q11)
 
 #- universidades que cuentan con 6 años de licenciamiento y pertenecen al departamento de lima
 q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% 
-                filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA',                      licenciamiento$PERIODO_LICENCIAMIENTO == 6, 
+                filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', licenciamiento$PERIODO_LICENCIAMIENTO == 6, 
                         licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA') %>% group_by(NOMBRE)
 head(q12)
 
@@ -129,13 +129,13 @@ g2
 g3 <- pie(table(licenciamiento$PERIODO_LICENCIAMIENTO), main = "Periodo de licenciamiento de Universidades")
 
 # Cantidad de carnes por univeridad (no se ve tan bien)
-aux <- carnesEx %>% group_by(NOMBRE_UNIVERSIDAD) %>% summarise(suma_canres = sum(Cant_Carnes))
-g4 <- ggplot(aux, aes(y=NOMBRE_UNIVERSIDAD, x=suma_canres, fill=NOMBRE_UNIVERSIDAD)) + theme_minimal()+geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de carnes por Universidad')
+aux <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_canres = sum(CANTIDAD_CARNES))
+g4 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de carnes por Universidad')
 g4
 
-# Cantidad de carnes por Carreras (se ve muy mal)
-aux2 <- carnesEx %>% group_by(NOMBRE_PROGRAMA) %>% summarise(suma_canres = sum(Cant_Carnes))
-g5 <- ggplot(aux2, aes(y=NOMBRE_PROGRAMA, x=suma_canres, fill=NOMBRE_PROGRAMA)) + theme_minimal()+geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de carnes por Universidad')
+# Cantidad de programas por Carreras (se ve muy mal)
+aux2 <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_programas = sum(PROGRAMAS_TOTAL))
+g5 <- ggplot(aux2, aes(y=NOMBRE, x=suma_programas, fill=NOMBRE)) + theme_minimal()+geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + labs(y='Universidades',x='Carnes', title='Numero de Programas por Universidad')
 g5
 
 # periodo de licenciamiento segun tipo de gestion
