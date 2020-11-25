@@ -114,8 +114,8 @@ corrplot(v)
 ####################### Knn para shiny ##################
 library(ggplot2)
 NROW(vinos) # 1599 -> 533
-
-x <- vinos$fixed.acidity # cambiar variables en el shiny
+view(vinos)
+x <- vinos$volatile.acidity # cambiar variables en el shiny
 y <- vinos$density # cambiar variables en el shiny
 
 dataframe = data.frame(x, y)
@@ -123,7 +123,7 @@ dataframe = data.frame(x, y)
 etiquetar <- function(dataframe) {
      grupos <- c()
      for (i in 1:NROW(dataframe)) {
-          if(dataframe$x[i]>=1 & dataframe$x[i]<(max(dataframe$x)*0.4)) {
+          if(dataframe$x[i]>=min(dataframe$x) & dataframe$x[i]<(max(dataframe$x)*0.4)) {
                grupos <- c(grupos,'A')
           }
           else if(dataframe$x[i]>=(max(dataframe$x)*0.3) & dataframe$x[i]<(max(dataframe$x)*0.6)) {
