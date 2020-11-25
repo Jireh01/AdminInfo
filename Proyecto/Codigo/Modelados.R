@@ -90,27 +90,37 @@ s.corcircle(componentes[,c(1,4)])
 
 ################### SVM #####################
 library(e1071)
-x1 <- vinos$total.sulfur.dioxide
+class(vinos)
+vinoMatrix <- as.matrix(vinos)
+
+x <- iris$Sepal.Length
+y <- iris$Sepal.Width
+data = data.frame(x, y = as.factor(y))
+data.svm = svm(y~., data = data, kernel = "linear", cost = 10, scale = FALSE)
+print(data.svm)
+plot(data.svm, data)
+
+x1 <- matrix(rnorm(vinos$total.sulfur.dioxide), 1599, 1)
 y1 <- vinos$free.sulfur.dioxide
 
 x2 <- vinos$fixed.acidity
 y2 <- vinos$residual.sugar
 
-dff <- data.frame(x1, y1 = as.factor(y1))
+dff <- data.frame(x, y1 = as.factor(y1))
 dff2 <- data.frame(x2, y2 = as.factor(y2))
 
 m <- svm(y1~., data = dff, 
                kernel = "linear", 
                cost = 5, 
                scale = FALSE)
-               
+
 m2 <- svm(y2~., data = dff2, 
                kernel = "radial", 
                cost = 16, 
                scale = FALSE)
 
-plot(m, dff, x1~y1)
-plot(m2, dff2, x2~y2)
+plot(m, dff)
+plot(m2, dff2)
 summary(m)
 summary(m2)
 
