@@ -123,10 +123,10 @@ dataframe = data.frame(x, y)
 etiquetar <- function(dataframe) {
      grupos <- c()
      for (i in 1:NROW(dataframe)) {
-          if(dataframe$x[i]>=1 & dataframe$x[i]<8) {
+          if(dataframe$x[i]>=1 & dataframe$x[i]<(max(dataframe$x)*0.4)) {
                grupos <- c(grupos,'A')
           }
-          else if(dataframe$x[i]>=8 & dataframe$x[i]<12) {
+          else if(dataframe$x[i]>=(max(dataframe$x)*0.3) & dataframe$x[i]<(max(dataframe$x)*0.6)) {
                grupos <- c(grupos, 'B')
           }
           else grupos <- c(grupos, 'C')
