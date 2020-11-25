@@ -1,11 +1,11 @@
 
-# 1- Universidades publicas que cuentan con el curso Ingenieria Mecanica (ARREGLAAAR)
+# 1- Tipo de departamento filial segun universidades publicas con carrera en Ingenieria Mecánica
 q3 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE, NOMBRE_FILIAL, NIVEL_ACADEMICO) %>% 
             filter(programas$TIPO_GESTION == 'PUBLICO', 
             programas$DENOMINACION_PROGRAMA == 'INGENIERIA MECANICA')
-grafico <- ggplot(q3, aes(y=NIVEL_ACADEMICO, x=NOMBRE_FILIAL)) + 
-theme_minimal() + geom_point(color="red",size=3) + goem_smooth(method="lm")
-        labs(y="Departamentos", x="Universidades", title="")
+grafico <- ggplot(q3, aes(y=NOMBRE, x=NOMBRE_FILIAL)) + 
+            theme_minimal() + geom_point(color="red",size=3) + 
+            labs(y="Departamentos", x="Universidades", title="")
 grafico
 
 # 2- grafico de pie de licenciamiento de universidades
@@ -22,9 +22,10 @@ grafico4 <- pie(table(licenciamiento$PERIODO_LICENCIAMIENTO),
                 main = "Periodo de licenciamiento de Universidades")
 
 # 5- Cantidad de carnes por univeridad 
-aux <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_canres = sum(CANTIDAD_CARNES))
+aux <- resumen_sunedu %>% select(NOMBRE) %>% filter(CANTIDAD_CARNES > 10000) %>% 
+                            summarise(suma_canres = sum(CANTIDAD_CARNES))
 grafico5 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+
-                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    geom_bar(stat="identity",width = 0.5,show.legend = FALSE) + 
                         labs(y='Universidades',x='Carnes', 
                         title='Numero de carnes por Universidad')
 grafico5
@@ -74,7 +75,7 @@ query2 <- carnes %>%
 				group_by(NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>%
 				summarize(CANTIDAD_CARNES = sum(Cant_Carnes)) %>%
 				filter(CANTIDAD_CARNES > 10000)
-grafico11 <- ggplot(query2, aes(y=NOMBRE_UNIVERSIDAD, x=CANTIDAD_CARNES)) + theme_minimal() + 
+grafico11 <- ggplot(query2, aes(y=NOMBRE_UNIVERSIDAD, x=CANTIDAD_CARNES, fill=CANTIDAD_CARNES)) + theme_minimal() + 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Numero de estudiantes', 
                             title='Numero de estudiantes por universidades con mas de 1000')
@@ -85,7 +86,7 @@ query <- carnes %>%
                 group_by(DEPARTAMENTO_FILIAL) %>%
                 summarize(CANTIDAD = sum(Cant_Carnes)) %>%
                 filter(CANTIDAD > mean(CANTIDAD))
-grafico12 <- ggplot(query, aes(x=DEPARTAMENTO_FILIAL, y=CANTIDAD)) + 
+grafico12 <- ggplot(query, aes(x=DEPARTAMENTO_FILIAL, y=CANTIDAD, fill=CANTIDAD)) + 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Estudiantes', x='Departamento', 
                         title='Numero de estudiantes que superan el promedio en su departamento')
@@ -95,7 +96,7 @@ grafico12
 query <- resumen_sunedu %>%
 						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>%
 						filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL), CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
-grafico13 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL))+ 
+grafico13 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=PROGRAMAS_TOTAL))+ 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Departamento', 
                         title='Numero de estudiantes que superan el promedio en su departamento')
@@ -104,7 +105,7 @@ grafico13
 # 14- Universidades que tienen menos del promedio de carnes
 query <- resumen_sunedu %>%
 						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>% filter(CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
-grafico14 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL))+ 
+grafico14 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE))+ 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Carnes', 
                         title='Numero de estudiantes que superan el promedio en su departamento')
