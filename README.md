@@ -2,9 +2,9 @@
 Trabajo final del curso de Administración de la Informacion de la UPC
 
 # Integrantes:
-  - Francesco Bassura
-  - Carlos Meteh Fierro
-  - Renzo Mondongon
+  - Francesco Bassino
+  - Carlos Jireh Ferroa
+  - Renzo Mondragón
 
 # Por hacer:
   - 
