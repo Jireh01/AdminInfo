@@ -1,7 +1,10 @@
 
-# 1- Universidades publicas que cuentan con el curso Ingenieria Mecanica 
+# 1- Universidades publicas que cuentan con el curso Ingenieria Mecanica (ARREGLAAAR)
+q3 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE, NOMBRE_FILIAL, NIVEL_ACADEMICO) %>% 
+            filter(programas$TIPO_GESTION == 'PUBLICO', 
+            programas$DENOMINACION_PROGRAMA == 'INGENIERIA MECANICA')
 grafico <- ggplot(q3, aes(y=NIVEL_ACADEMICO, x=NOMBRE_FILIAL)) + 
-theme_minimal() + geom_point(color="red",size=3) + 
+theme_minimal() + geom_point(color="red",size=3) + goem_smooth(method="lm")
         labs(y="Departamentos", x="Universidades", title="")
 grafico
 
@@ -18,7 +21,7 @@ grafico3
 grafico4 <- pie(table(licenciamiento$PERIODO_LICENCIAMIENTO), 
                 main = "Periodo de licenciamiento de Universidades")
 
-# 5- Cantidad de carnes por univeridad (no se ve tan bien)
+# 5- Cantidad de carnes por univeridad 
 aux <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_canres = sum(CANTIDAD_CARNES))
 grafico5 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
@@ -26,14 +29,14 @@ grafico5 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minim
                         title='Numero de carnes por Universidad')
 grafico5
 
-# 6- Cantidad de programas por Carreras (se ve muy mal)
+# 6- Cantidad de programas por Universidad 
 aux2 <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_programas = sum(PROGRAMAS_TOTAL))
 grafico6 <- ggplot(aux2, aes(y=NOMBRE, x=suma_programas, fill=NOMBRE)) + theme_minimal()+
                     geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + 
-                    labs(y='Universidades',x='Carnes', title='Numero de Programas por Universidad')
+                    labs(y='Universidades',x='Programas', title='Numero de Programas por Universidad')
 grafico6
 
-# 7- periodo de licenciamiento segun tipo de gestion
+# 7- Periodo de licenciamiento segun tipo de gestion
 aux3 <- licenciamiento %>% group_by(TIPO_GESTION) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
 grafico7 <- ggplot(aux3, aes(y=TIPO_GESTION,x=suma_lic, fill=TIPO_GESTION)) + 
                 geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
@@ -56,7 +59,7 @@ grafico9 <- ggplot(aux5, aes(y=NOMBRE, x=suma_lic, fill=NOMBRE)) + theme_minimal
                     labs(y='Universidades', x='Periodo de licenciamiento', title='Periodo de Licenciamiento según Departamento')
 grafico9
 
-# 10- Universidades que tienen la licencia otorgada segun la SUNEDU y le quedan mas de 7 años de licencia
+# 10- Universidades que tienen mas de 7 años de licencia activa 
 query <- licenciamiento %>%
 						select(NOMBRE, ESTADO_LICENCIAMIENTO, PERIODO_LICENCIAMIENTO) %>% 
 						filter(ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', PERIODO_LICENCIAMIENTO >= 7)
@@ -64,3 +67,59 @@ grafico10 <- ggplot(query, aes(y=NOMBRE, x=PERIODO_LICENCIAMIENTO)) + theme_mini
                     geom_boxplot()
 grafico10
 
+# 11- Universidades privadas que tienen mas de 10000 estudiantes
+query2 <- carnes %>%
+				select(NOMBRE_UNIVERSIDAD, TIPO_GESTION, Cant_Carnes) %>%
+				filter(TIPO_GESTION == 'PRIVADO') %>%
+				group_by(NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>%
+				summarize(CANTIDAD_CARNES = sum(Cant_Carnes)) %>%
+				filter(CANTIDAD_CARNES > 10000)
+grafico11 <- ggplot(query2, aes(y=NOMBRE_UNIVERSIDAD, x=CANTIDAD_CARNES)) + theme_minimal() + 
+                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    labs(y='Universidades', x='Numero de estudiantes', 
+                            title='Numero de estudiantes por universidades con mas de 1000')
+grafico11
+
+# 12- Estudiantes en total de cada departamento del Peru que supera el promedio de estudiantes por departamento
+query <- carnes %>%
+                group_by(DEPARTAMENTO_FILIAL) %>%
+                summarize(CANTIDAD = sum(Cant_Carnes)) %>%
+                filter(CANTIDAD > mean(CANTIDAD))
+grafico12 <- ggplot(query, aes(x=DEPARTAMENTO_FILIAL, y=CANTIDAD)) + 
+                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    labs(y='Estudiantes', x='Departamento', 
+                        title='Numero de estudiantes que superan el promedio en su departamento')
+grafico12
+
+# 13- Universidades que tienen mas del promedio de programas totales
+query <- resumen_sunedu %>%
+						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>%
+						filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL), CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
+grafico13 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL))+ 
+                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    labs(y='Universidades', x='Departamento', 
+                        title='Numero de estudiantes que superan el promedio en su departamento')
+grafico13
+
+# 14- Universidades que tienen menos del promedio de carnes
+query <- resumen_sunedu %>%
+						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>% filter(CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
+grafico14 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL))+ 
+                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    labs(y='Universidades', x='Carnes', 
+                        title='Numero de estudiantes que superan el promedio en su departamento')
+grafico14
+
+# 15- Histograma de periodo de frecuencia de licenciamiento
+hist(resumen_sunedu$PERIODO_LICENCIAMIENTO, 
+                main='Histograma de periodo de frecuencia de licenciamiento')
+
+# 16- Universidades que tienen mas del promedio de programas totales y que cuentan con licencia 
+query <- resumen_sunedu %>% select(NOMBRE,PROGRAMAS_TOTAL) %>% filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL))
+grafico16 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL)) + 
+                geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                labs(y='Universidades', x='Programas', 
+                    title='Universidades que tienen mas del promedio de programas')
+
+# 17- Hiatograma de frecuencia de carnes universitarios
+hist(resumen_sunedu$CANTIDAD_CARNES, main='Hiatograma de frecuencia de carnes universitarios')
