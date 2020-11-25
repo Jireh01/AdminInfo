@@ -59,7 +59,15 @@ carnes <- carnes[,-(0:1), drop = FALSE]
 programas <- programas[,-(0:1), drop = FALSE]
 
 # Convirtiendo string a entero
+carnes$CODIGO <- strtoi(carnes$CODIGO)
+carnes$CODIGO_CLASE_PROGRAMA <- strtoi(carnes$CODIGO_CLASE_PROGRAMA)
 carnes$Cant_Carnes <- strtoi(carnes$Cant_Carnes)
+carnes$ANIO_PERIODO <- strtoi(carnes$Cant_Carnes)
+licenciamiento$CODIGO_ENTIDAD <- strtoi(licenciamiento$CODIGO_ENTIDAD)
+licenciamiento$PERIODO_LICENCIAMIENTO <- strtoi(licenciamiento$PERIODO_LICENCIAMIENTO)
+programas$CODIGO_ENTIDAD <- strtoi(programas$CODIGO_ENTIDAD)
+programas$PERIODO_LICENCIAMIENTO <- strtoi(programas$PERIODO_LICENCIAMIENTO)
+programas$CODIGO_CLASE_PROGRAMA_N2 <- stroi(programas$CODIGO_CLASE_PROGRAMA_N2)
 
 # Guardamos los dataframes limpios
 write.csv(licenciamiento, file="Datasets/2-Preprocesados/licenciamiento.csv", row.names=F)
