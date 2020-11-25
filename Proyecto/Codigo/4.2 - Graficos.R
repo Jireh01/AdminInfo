@@ -150,33 +150,46 @@ grafico14
 # 15- Histograma de periodo de frecuencia de licenciamiento
 hist(resumen_sunedu$PERIODO_LICENCIAMIENTO, 
                 main='Histograma de periodo de frecuencia de licenciamiento')
+# Interpretacion: La frecuencia mas alta es de 6 años para los licenciamientos
 
 # 16- Universidades que tienen mas del promedio de programas totales y que cuentan con licencia 
 query <- resumen_sunedu %>% select(NOMBRE,PROGRAMAS_TOTAL) %>% filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL))
-grafico16 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL)) + 
+grafico16 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL), fill=NOMBRE) + 
                 geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                 labs(y='Universidades', x='Programas', 
                     title='Universidades que tienen mas del promedio de programas')
+grafico16
+# Interpretacion: Otra vez, gana Cayetano con mas del promedio de programas y que cuentan con licencia
+
 
 # 17- Hiatograma de frecuencia de carnes universitarios
 hist(resumen_sunedu$CANTIDAD_CARNES, main='Hiatograma de frecuencia de carnes universitarios')
+# Interpretacion: Se puede ver que la mayor frecuencia esta entre 0 y los 1000 carnes de universidades licenciadas
+
 
 # 18- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
 # Sin outliers
 boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
         resumen_sunedu$CANTIDAD_CARNES, outline = FALSE)
+# Interpretacion: Programas y carnes sin outliers  con diagrama de bloque
 
 # 19- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
 # Con outliers
 boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
         resumen_sunedu$CANTIDAD_CARNES)
+# Interpretacion: Programas y carnes Con outliers con diagrama de bloque
+# Se puede ver como la cantidad de carnes es la que cuenta con mas outliers y con cantidad
 
 # 20- Diagrama de dispercion entre los programas y la cantidad de carnes
 grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES)) + geom_point(color="blue") + 
                     labs(y='Carnes', x='Programas', 
                     title="Diagrama de Disperción Entre Programas y Carnes")
 grafico20
+# Interpretacion: Grafico de dispercion entre los programas totales y los carnes. Se puede ver como el grafico va en forma de cono para afuera
+# Este modelo hasta podria servir para ciertos modelados que se han realizado en clase
+
 
 # 21- Histograma de frecuencua de programas de universidades
 hist(resumen_sunedu$PROGRAMAS_TOTAL, 
         main='Histograma de frecuencua de programas de universidades')
+# Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100
