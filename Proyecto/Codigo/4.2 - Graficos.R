@@ -1,3 +1,11 @@
+library(ggplot2)
+
+# Cargamos los data.frames
+licenciamiento <- read.csv("Datasets/2-Preprocesados/licenciamiento.csv")
+carnes <- read.csv("Datasets/2-Preprocesados/carnes.csv")
+programas <- read.csv("Datasets/2-Preprocesados/programas.csv")
+resumen_sunedu <- read.csv("Datasets/3-Generado/resumen_sunedu.csv")
+
 
 # 1- Tipo de departamento filial segun universidades publicas con carrera en Ingenieria Mecánica
 q3 <- programas %>% select(CODIGO_ENTIDAD, NOMBRE, NOMBRE_FILIAL, NIVEL_ACADEMICO) %>% 
