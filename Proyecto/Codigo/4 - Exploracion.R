@@ -5,19 +5,19 @@ library(dplyr)
 ## TRANSFORMACION
 
 # Cargamos los datasets preprocesados
-licenciamiento = read.csv("Datasets/2-Preprocesados/licenciamiento.csv")
-carnes = read.csv("Datasets/2-Preprocesados/carnes.csv")
-programas = read.csv("Datasets/2-Preprocesados/programas.csv")
+licenciamiento <- read.csv("Datasets/2-Preprocesados/licenciamiento.csv")
+carnes <- read.csv("Datasets/2-Preprocesados/carnes.csv")
+programas <- read.csv("Datasets/2-Preprocesados/programas.csv")
 
 # Universidad y si esta licenciada o no
 Licenciado <- licenciamiento %>% mutate(LICENCIAMIENTO = ifelse(ESTADO_LICENCIAMIENTO == "LICENCIA DENEGADA", "NO", "SI")) %>%
 				select(CODIGO_ENTIDAD,NOMBRE,LICENCIAMIENTO,PERIODO_LICENCIAMIENTO)
 
 # Cuantos programas tiene cada universidad
-ProgramasTotal <- programas %>% group_by(NOMBRE) %>% summarise(PROGRAMAS_TOTAL= n())
+ProgramasTotal <- programas %>% group_by(NOMBRE) %>% summarize(PROGRAMAS_TOTAL= n())
 
 # Cuantos carnes tiene cada universidad
-CarnesTotal <- carnes %>% group_by(NOMBRE_UNIVERSIDAD) %>% summarise(CANTIDAD_CARNES = sum(Cant_Carnes))
+CarnesTotal <- carnes %>% group_by(NOMBRE_UNIVERSIDAD) %>% summarize(CANTIDAD_CARNES = sum(Cant_Carnes))
 
 # Hacemos un nuevo dataframe con estos queries
 resumen_sunedu <- Licenciado %>% inner_join(ProgramasTotal, by=c("NOMBRE"="NOMBRE")) %>%
