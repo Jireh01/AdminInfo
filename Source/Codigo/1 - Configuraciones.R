@@ -1,9 +1,4 @@
-# Instalacion de paquetes
-install.packages("RMySQL")
-install.packages("DBI")
-
 # Activando las librerias
-
 library(RMySQL) # nos permite usar MySQL en R de manera facil
 library(DBI) # con DBI podemos obtener informacion sobre nuestra base de datos, asi como escribir tablas, etc
 library(dplyr)
