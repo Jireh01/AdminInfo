@@ -9,9 +9,9 @@ corrplot(v)
 view(vinos)
 #################### Regresion Lineal ####################
 # Regresion lineal (en el shiny las variables las pone el usuario)
-R = lm(vinos$fixed.acidity~vinos$pH)
+R = lm(vinos$fixed.acidity~vinos$density)
 # ploteal los puntos
-plot(vinos$pH, vinos$fixed)
+plot(vinos$density, vinos$fixed.acidity)
 # Te muestra la linea de regresion
 abline(R, col="red", lwd=2)
 
@@ -41,9 +41,9 @@ accuracy
 ################### KNN #####################
 library(ggplot2)
 library(class)
-
+plot()
 # en esta parte seleccionas que variables quieres 
-vinosKnn <- data.frame(vinos$fixed.acidity, vinos$chlorides)
+vinosKnn <- data.frame(vinos$fixed.acidity, vinos$density)
 dat <- sample(1:nrow(vinosKnn),size=nrow(vinosKnn)*0.7,replace = FALSE)
 
 train <- vinos[dat,] # 70%
@@ -56,7 +56,6 @@ knn <- knn(train=train, test=test, cl=train.labels, k = 10, prob=TRUE)
 
 accuracy.fin <- 100 * sum(train.labels == knn)/NROW(test.labels)
 accuracy.fin
-
 
 ################### KMeans ##################
 corrplot(v)
@@ -91,13 +90,86 @@ s.corcircle(componentes[,c(1,4)])
 
 ################### SVM #####################
 library(e1071)
+x1 <- vinos$total.sulfur.dioxide
+y1 <- vinos$free.sulfur.dioxide
 
-dff <- data.frame(vinos$quality, vinos$free.sulfur.dioxide)
+x2 <- vinos$fixed.acidity
+y2 <- vinos$residual.sugar
 
-m <- svm(vinos.quality~., data = dff)
-plot(m, dff)
+dff <- data.frame(x1, y1 = as.factor(y1))
+dff2 <- data.frame(x2, y2 = as.factor(y2))
 
-## more than two variables: fix 2 dimensions
-m2 <- svm(Species~., data = iris)
-plot(m2, iris, Petal.Width ~ Petal.Length,
-     slice = list(Sepal.Width = 3, Sepal.Length = 4))
+m <- svm(y1~., data = dff, kernel = "linear", cost = 5, scale = FALSE)
+m2 <- svm(y2~., data = dff2, kernel = "radial", cost = 16, scale = FALSE)
+
+plot(m, dff, x1~y1)
+plot(m2, dff2, x2~y2)
+summary(m)
+summary(m2)
+
+view(vinos)
+corrplot(v)
+
+
+####################### Knn para shiny ##################
+library(ggplot2)
+NROW(vinos) # 1599 -> 533
+
+x <- vinos$fixed.acidity # cambiar variables en el shiny
+y <- vinos$density # cambiar variables en el shiny
+
+dataframe = data.frame(x, y)
+
+etiquetar <- function(dataframe) {
+     grupos <- c()
+     for (i in 1:NROW(dataframe)) {
+          if(dataframe$x[i]>=1 & dataframe$x[i]<8) {
+               grupos <- c(grupos,'A')
+          }
+          else if(dataframe$x[i]>=8 & dataframe$x[i]<12) {
+               grupos <- c(grupos, 'B')
+          }
+          else grupos <- c(grupos, 'C')
+     }
+     dataframe <- cbind(dataframe, grupos)
+     return(dataframe)
+}
+dataframe = etiquetar(dataframe)
+head(dataframe)
+
+ggplot(data = dataframe,aes(x=dataframe$x,y=dataframe$y,color=dataframe$grupos))+
+     geom_point()+xlab("X")+ylab("Y")+ggtitle("Clasificador KNN")
+
+# sacar el 70% y el 30% para entrenamiento y testeo respectivamente
+ids=sample(1:nrow(dataframe),size=nrow(dataframe)*0.7,replace = FALSE)
+
+Entrenamiento<-dataframe[ids,]
+Test<-dataframe[-ids,]
+
+ggplot(data = Entrenamiento ,aes(x=x,y=y,color=grupos))+
+     geom_point()+xlab("X")+ylab("Y")+ggtitle("Clasificador KNN")
+
+dataframe.temporal = dataframe
+
+knn <- function(dataframe.temporal, nuevoX, nuevoY, k, metodo) {
+     if (metodo == 1) {
+          d <- (abs(nuevoX-dataframe.temporal$x)-abs(nuevoY-dataframe.temporal$y))
+     } else {
+          d <- sqrt((nuevoX-dataframe.temporal$x)^2 + (nuevoY-dataframe.temporal$y)^2)
+     }
+     dataframe.temporal <- cbind(dataframe.temporal, d)
+     vOrden <- sort(dataframe.temporal$d)
+     vecinos <- dataframe.temporal[dataframe.temporal$d %in% vOrden[1:k],3]
+     return (vecinos[1:k])
+}
+v <- knn(dataframe, 7, 13, 1332, 1)
+porc<-function(vector,value) {
+     return (sum(as.integer(vector==value)))
+}
+a<-porc(v,"A")
+b<-porc(v,"B")
+c<-porc(v,"C")
+total<-(a+b+c)
+a*100/total
+b*100/total
+c*100/total
