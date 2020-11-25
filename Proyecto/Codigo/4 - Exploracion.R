@@ -25,7 +25,7 @@ resumen_sunedu <- Licenciado %>% inner_join(ProgramasTotal, by=c("NOMBRE"="NOMBR
 			arrange(CODIGO_ENTIDAD)
 
 # Revisamos si la estructura esta bien puesta
-head(resumen_sunedu)
+view(resumen_sunedu)
 
 # Guardamos este nuevo data.frame
 write.csv(resumen_sunedu, file="Datasets/3-Generado/resumen_sunedu.csv", row.names=F)

@@ -33,7 +33,7 @@ licenciamiento <- removerEnBlancos(licenciamiento)
 carnes <- removerEnBlancos(carnes)
 programas <- removerEnBlancos(programas)
 
-# Remover las lineas con mas de 2 columnas con NA
+# Imputacion: Remover las lineas con mas de 2 columnas con NA
 licenciamiento <- licenciamiento[rowSums(is.na(licenciamiento)) < 2, ]
 carnes <- carnes[rowSums(is.na(carnes)) < 2, ]
 programas <- programas[rowSums(is.na(programas)) < 2, ]
