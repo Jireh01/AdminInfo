@@ -104,14 +104,55 @@ query <- licenciamiento %>%
 						filter(ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA',
 								PERIODO_LICENCIAMIENTO == 6,
 								DEPARTAMENTO_LOCAL == 'LIMA')
-query
+head(query)
 
 # 13. Cantidad de estudiantes de universidades privadas en ICA
+query <- licenciamiento %>%
+						filter(DEPARTAMENTO_LOCAL=="ICA",TIPO_GESTION=="PRIVADO") %>% 
+						select(NOMBRE) %>%
+						inner_join(carnes %>%
+											group_by(NOMBRE_UNIVERSIDAD) %>%
+											summarize(CANTIDAD_CARNES = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						select(CANTIDAD_ALUMNOS = CANTIDAD_CARNES)
+head(query)
+
+# 14. Universidades privadas que no son de Lima que no tienen licencia
+query <- licenciamiento %>%
+						select(NOMBRE,TIPO_GESTION,DEPARTAMENTO_LOCAL,ESTADO_LICENCIAMIENTO) %>%
+						filter(TIPO_GESTION == "PRIVADO",
+							DEPARTAMENTO_LOCAL != "LIMA",
+							ESTADO_LICENCIAMIENTO != "LICENCIA OTORGADA")
+head(query)
+
+# 15. Cantidad de alumnos de universidades cuyas licencias fueron revocadas
+query <- licenciamiento %>%
+						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
+						filter(ESTADO_LICENCIAMIENTO == "LICENCIA DENEGADA") %>%
+						inner_join(carnes %>%
+											group_by(NOMBRE_UNIVERSIDAD) %>%
+											summarize(CANTIDAD_ALUMNOS = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						summarize(TOTAL = sum(CANTIDAD_ALUMNOS))
+head(query)
+
+# 16. Universidades que tienen mas del promedio de programas totales y menos del promedio de cantidad de carnes
+query <- resumen_sunedu %>%
+						select(NOMBRE, PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>%
+						filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL), CANTIDAD_CARNES < mean(CANTIDAD_CARNES))
+head(query)
+
+# 17. Cantidad de alumnos de universidades publicas en la carrera de Salud
 query <- carnes %>%
-				select(DEPARTAMENTO_LOCAL, TIPO_GESTION) %>%
+				filter(TIPO_GESTION=="PUBLICO", NOMBRE_CLASE_PROGRAMA=="SALUD") %>%
+				summarize(Cantidad = sum(Cant_Carnes))
+
+head(query)
 
 
-# 14. Universidades que se encontraban licenciadas en Enero 2020 pero para Abril 2020 ya no lo estan
+
+
+
 
 q15 <- licenciamiento %>% group_by(DEPARTAMENTO_LOCAL) %>% 
                 summarise(percent70 = quantile(licenciamiento$PERIODO_LICENCIAMIENTO, probs = .5)) 
@@ -133,3 +174,15 @@ head(q17)
 
 
 
+# Universidades que tienen la licencia segun la SUNEDU y le quedan mas de 7 años de licencia
+q2 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% 
+            filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', 
+                licenciamiento$PERIODO_LICENCIAMIENTO >= 7)
+grafico <- ggplot(q2, aes(y=DEPARTAMENTO_LOCAL, x=NOMBRE)) + theme_minimal() + geom_point(color="red",size=3) + labs(y="Departamentos", x="Universidades", title="")
+grafico
+
+####
+group_nombre<-inner_join(programas%>%group_by(NOMBRE),licenciamiento%>%group_by(NOMBRE),by="NOMBRE")%>%select(NOMBRE,PERIODO_LICENCIAMIENTO.x)
+group_programa<-programas%>%group_by(NOMBRE)%>%summarise(total_programas=n())
+
+View(inner_join(group_nombre,group_programa, by="NOMBRE"))
