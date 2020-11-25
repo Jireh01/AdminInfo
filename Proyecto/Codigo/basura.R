@@ -17,7 +17,7 @@ head(q3)
 grafico <- ggplot(q3, aes(y=NIVEL_ACADEMICO, x=NOMBRE_FILIAL)) + theme_minimal() + geom_point(color="red",size=3) + labs(y="Departamentos", x="Universidades", title="")
 grafico
 
-
+ 
 # Universidades de ICA que no cuentan con licencia por SUNEDU
 q5 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL, TIPO_GESTION) %>% 
             filter(licenciamiento$DEPARTAMENTO == 'ICA', licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA DENEGADA')
