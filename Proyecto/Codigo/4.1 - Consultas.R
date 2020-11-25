@@ -114,12 +114,19 @@ query <- programas %>%
 					summarize(PROGRAMAS_TOTAL = n())
 head(query)
 
-#10. Cuantas universidades que se encuentran fuera de LIMA cuentan con programas postgrado, ordernar de manera descendiente
-query <- programas %>%
-					select(NOMBRE, DEPARTAMENTO_LOCAL, TIPO_NIVEL_ACADEMICO) %>% 
-					filter(DEPARTAMENTO_LOCAL != 'LIMA', TIPO_NIVEL_ACADEMICO == 'POSGRADO') %>%
-					group_by(NOMBRE) %>% summarize(PROGRAMAS_TOTAL = n()) %>%
-					arrange(desc(PROGRAMAS_TOTAL))
+# 10. Universidades privadas que tienen licenciamiento segun la lista de Abril 2020 y que tienen mas del
+#		promedio de programas academicos. Mostrar el estado de licenciamiento y cantidad de programas
+#		academicos. Tambien, ordenar por mayor cantidad de programas y como segunda prioridad alfabeticamente.
+query <- licenciamiento %>%
+						filter(TIPO_GESTION == "PRIVADO",
+							ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
+						inner_join(programas %>%
+											group_by(NOMBRE) %>%
+											summarize(PROGRAMAS = n()) %>%
+											filter(PROGRAMAS > mean(PROGRAMAS)),
+									by=c("NOMBRE"="NOMBRE")) %>%
+						arrange(desc(PROGRAMAS), NOMBRE)
 head(query)
 
 # 11. Cantidad de cursos de la carrera de derecho que tienen menos del promedio de carnes que tiene cada curso
@@ -196,7 +203,8 @@ query <- licenciamiento %>%
 						group_by(DEPARTAMENTO_LOCAL) %>%
 						summarize(UNIVERSIDADES = n()) %>%
 						filter(UNIVERSIDADES == first(licenciamiento %>% 
-												filter(DEPARTAMENTO_LOCAL != "LIMA", ESTADO_LICENCIAMIENTO!="LICENCIA OTORGADA") %>%
+												filter(DEPARTAMENTO_LOCAL != "LIMA",
+														ESTADO_LICENCIAMIENTO!="LICENCIA OTORGADA") %>%
 												group_by(DEPARTAMENTO_LOCAL) %>%
 												summarize(UNIVERSIDADES = n()) %>%
 												summarize (MAX = max(UNIVERSIDADES))))
@@ -274,21 +282,20 @@ query <- licenciamiento %>%
 						filter(ESTADO_LICENCIAMIENTO == 'LICENCIA DENEGADA')
 head(query)
 
-# 29. Universidades privadas que tienen licenciamiento segun la lista de Abril 2020 y que tienen mas del
-#		promedio de programas academicos. Mostrar el estado de licenciamiento y cantidad de programas
-#		academicos. Tambien, ordenar por mayor cantidad de programas y como segunda prioridad alfabeticamente.
-query <- licenciamiento %>%
-						filter(TIPO_GESTION == "PRIVADO",
-							ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
-						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
-						inner_join(programas %>%
-											group_by(NOMBRE) %>%
-											summarize(PROGRAMAS = n()) %>%
-											filter(PROGRAMAS > mean(PROGRAMAS)),
-									by=c("NOMBRE"="NOMBRE")) %>%
-						arrange(desc(PROGRAMAS), NOMBRE)
+#29. Cuantas universidades que se encuentran fuera de LIMA cuentan con programas postgrado, ordernar de manera descendiente
+query <- programas %>%
+					select(NOMBRE, DEPARTAMENTO_LOCAL, TIPO_NIVEL_ACADEMICO) %>% 
+					filter(DEPARTAMENTO_LOCAL != 'LIMA', TIPO_NIVEL_ACADEMICO == 'POSGRADO') %>%
+					group_by(NOMBRE) %>% summarize(PROGRAMAS_TOTAL = n()) %>%
+					arrange(desc(PROGRAMAS_TOTAL))
 head(query)
 
-# 30. 
-
-
+# 30. Obtener la cantidad de programas academicos en cada tipo de nivel academico de las universidades,
+#		ademas de tambien ordenarlo a ascendentemente segun el nombre y descendentemente la cantidad
+#		de programas como segunda prioridad
+query <- programas %>%
+					select(NOMBRE,NIVEL_ACADEMICO) %>%
+					group_by(NOMBRE,NIVEL_ACADEMICO) %>%
+					summarize(PROGRAMAS = n()) %>%
+					arrange(NOMBRE,desc(PROGRAMAS))
+view(query)
