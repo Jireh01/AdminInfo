@@ -115,8 +115,15 @@ plot(m2, dff2)
 summary(m)
 summary(m2)
 
-view(vinos)
-corrplot(v)
+vino$total.sulfur.dioxide = factor(vino$total.sulfur.dioxide)
+set.seed(2020)
+t.ids<- createDataPartition(vino$total.sulfur.dioxide, p=0.7, list = F)
+mod <- svm(total.sulfur.dioxide ~ .,data = vino[t.ids, ])
+table(vino[t.ids, "total.sulfur.dioxide"], fitted(mod), dnn = c("Actual", "Predicho"))
+pred <- predict(mod, vino[-t.ids,])
+table(vino[-t.ids,"total.sulfur.dioxide"], pred, dnn =c("Actual", "Predicho"))
+
+plot(mod,data=vino[t.ids,], skew ~ variance)
 
 
 ####################### Knn para shiny ##################

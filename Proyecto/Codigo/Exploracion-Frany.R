@@ -46,9 +46,9 @@ q5 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL, TIPO
 head(q5)
 
 # Clases privadas que tienen mas de 100 carnets 
-carnesEx$Cant_Carnes <- as.integer(carnesEx$Cant_Carnes)
-q6 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% 
-            filter(carnesEx$TIPO_GESTION == 'PRIVADO', carnesEx$Cant_Carnes > 100)
+carnes$Cant_Carnes <- as.integer(carnes$Cant_Carnes)
+q6 <- carnes %>% select(CODIGO, NOMBRE_UNIVERSIDAD, DEPARTAMENTO_FILIAL) %>% 
+            filter(carnes$TIPO_GESTION == 'PRIVADO', carnes$Cant_Carnes > 100)
 head(q6)
 
 # Todos lo programas que tiene la UPC 
@@ -58,9 +58,9 @@ head(q7)
 
 
 # Universidades que no tienen un departamento filial en su registro y cuentan con informatica como curso
-q8 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% 
-                filter(carnesEx$NOMBRE_CLASE_PROGRAMA == 'INFORMATICA', 
-                        carnesEx$NOMBRE_FILIAL == '[NO ESPECIFICADO]')
+q8 <- carnes %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% 
+                filter(carnes$NOMBRE_CLASE_PROGRAMA == 'INFORMATICA', 
+                        carnes$NOMBRE_FILIAL == '[NO ESPECIFICADO]')
 head(q8)
 
 # Cursos de universidades de Junin que cuentan con Maestria 
@@ -77,17 +77,15 @@ head(q10)
 head(count(q10))
 
 # Cursos que tienen menos del promedio de carnes (estudiantes) y que son de la carrera de derecho
-q11 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, Cant_Carnes) %>% 
-                filter(carnesEx$Cant_Carnes < mean(carnesEx$Cant_Carnes),
-                carnesEx$NOMBRE_PROGRAMA == 'DERECHO')
+q11 <- carnes %>% select(CODIGO, NOMBRE_UNIVERSIDAD, Cant_Carnes) %>% 
+                filter(carnes$Cant_Carnes < mean(carnes$Cant_Carnes),
+                carnes$NOMBRE_PROGRAMA == 'DERECHO')
 head(q11)
 
 #- universidades que cuentan con 6 años de licenciamiento y pertenecen al departamento de lima
 q12 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% 
-                filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', 
-                        licenciamiento$PERIODO_LICENCIAMIENTO == 6, 
-                        licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA') 
-                        %>% group_by(NOMBRE)
+                filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA',                      licenciamiento$PERIODO_LICENCIAMIENTO == 6, 
+                        licenciamiento$DEPARTAMENTO_LOCAL == 'LIMA') %>% group_by(NOMBRE)
 head(q12)
 
 
@@ -110,8 +108,8 @@ q16 <- licenciamiento %>% select(NOMBRE) %>%
 view(q16)
 
 
-q17 <- carnesEx %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% 
-                    filter(carnesEx$Cant_Carnes < max(carnesEx$Cant_Carnes))
+q17 <- carnes %>% select(CODIGO, NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>% 
+                    filter(carnes$Cant_Carnes < max(carnes$Cant_Carnes))
 head(q17)
 
 view(iris)
