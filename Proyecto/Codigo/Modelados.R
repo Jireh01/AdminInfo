@@ -141,7 +141,7 @@ etiquetar <- function(dataframe) {
           if(dataframe$x[i]>=min(dataframe$x) & dataframe$x[i]<(max(dataframe$x)*0.4)) {
                grupos <- c(grupos,'A')
           }
-          else if(dataframe$x[i]>=(max(dataframe$x)*0.3) & dataframe$x[i]<(max(dataframe$x)*0.6)) {
+          else if(dataframe$x[i]>=(max(dataframe$x)*0.4) & dataframe$x[i]<(max(dataframe$x)*0.6)) {
                grupos <- c(grupos, 'B')
           }
           else grupos <- c(grupos, 'C')
