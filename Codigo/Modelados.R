@@ -56,15 +56,16 @@ knn <- knn(train=train, test=test, cl=train.labels, k = 10, prob=TRUE)
 
 accuracy.fin <- 100 * sum(train.labels == knn)/NROW(test.labels)
 
+
+
 ################### KMeans ##################
 corrplot(v)
 plot(vinos$free.sulfur.dioxide, vinos$sulphates)
-df <- cbind(vinos$free.sulfur.dioxide, vinos$sulphates)
+df <- data.frame(vinos$free.sulfur.dioxide, vinos$sulphates)
 
 kmeans <- kmeans(df, 3)
 plot(df, col = kmeans$cluster)
 points(kmeans$centers, col = 1:2, pch = 8, cex = 2)
-
 
 
 ################### PCA #####################
@@ -87,5 +88,17 @@ s.corcircle(componentes[,c(1,2)]) #Todos los componentes de la col 1 y 2
 
 s.corcircle(componentes[,c(1,4)])
 
-################### SVM #####################
 
+################### SVM #####################
+library(e1071)
+data(iris)
+
+dff <- cbind(vinos$free.sulfur.dioxide, vinos$sulphates)
+data(dff)
+m <- svm(sulphates~., data = dff)
+plot(m, cats)
+
+## more than two variables: fix 2 dimensions
+m2 <- svm(Species~., data = iris)
+plot(m2, iris, Petal.Width ~ Petal.Length,
+     slice = list(Sepal.Width = 3, Sepal.Length = 4))
