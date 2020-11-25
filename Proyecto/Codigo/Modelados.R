@@ -99,8 +99,15 @@ y2 <- vinos$residual.sugar
 dff <- data.frame(x1, y1 = as.factor(y1))
 dff2 <- data.frame(x2, y2 = as.factor(y2))
 
-m <- svm(y1~., data = dff, kernel = "linear", cost = 5, scale = FALSE)
-m2 <- svm(y2~., data = dff2, kernel = "radial", cost = 16, scale = FALSE)
+m <- svm(y1~., data = dff, 
+               kernel = "linear", 
+               cost = 5, 
+               scale = FALSE)
+               
+m2 <- svm(y2~., data = dff2, 
+               kernel = "radial", 
+               cost = 16, 
+               scale = FALSE)
 
 plot(m, dff, x1~y1)
 plot(m2, dff2, x2~y2)
@@ -113,7 +120,7 @@ corrplot(v)
 
 ####################### Knn para shiny ##################
 library(ggplot2)
-NROW(vinos) # 1599 -> 533
+NROW(vinos) 
 view(vinos)
 x <- vinos$volatile.acidity # cambiar variables en el shiny
 y <- vinos$density # cambiar variables en el shiny
