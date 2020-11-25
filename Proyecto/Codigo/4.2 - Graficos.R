@@ -124,3 +124,17 @@ grafico16 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL)) +
 
 # 17- Hiatograma de frecuencia de carnes universitarios
 hist(resumen_sunedu$CANTIDAD_CARNES, main='Hiatograma de frecuencia de carnes universitarios')
+
+# 18- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
+boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
+        resumen_sunedu$CANTIDAD_CARNES, show.legend=TRUE)
+
+# 19- Diagrama de dispercion entre los programas y la cantidad de carnes
+grafico19 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES)) + geom_point(color="blue") + 
+                    labs(y='Carnes', x='Programas', 
+                    title="Diagrama de Disperción Entre Programas y Carnes")
+grafico19
+
+# 20- Histograma de frecuencua de programas de universidades
+hist(resumen_sunedu$PROGRAMAS_TOTAL, 
+        main='Histograma de frecuencua de programas de universidades')
