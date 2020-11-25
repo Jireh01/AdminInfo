@@ -6,7 +6,7 @@ licenciamiento$PERIODO_LICENCIAMIENTO <- as.integer(licenciamiento$PERIODO_LICEN
 q2 <- licenciamiento %>% select(CODIGO_ENTIDAD, NOMBRE, DEPARTAMENTO_LOCAL) %>% 
             filter(licenciamiento$ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', 
                 licenciamiento$PERIODO_LICENCIAMIENTO >= 7)
-grafico <- ggplot(q2, aes(y=DEPARTAMENTO_LOCAL, x=NOMBRE)) + theme_minimal() + geom_point(color="red",size=3) + labs(y="Departamentos", x="Universidades", title="")
+grafico <- ggplot(q2, aes(DEPARTAMENTO_LOCAL)) + theme_minimal() + geom_histogram(stat="count", banwidth=5) + labs(y="Departamentos", x="Universidades", title="Cantidad de Universidades con mas de 7 años de licencia segun su departamento")
 grafico
 
 # Universidades publicas que cuentan con el curso Ingenieria Mecanica 
