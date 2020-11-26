@@ -23,9 +23,10 @@ grafico
 
 # 2- grafico de pie de licenciamiento de universidades
 grafico2 <- ggplot(licenciamiento, aes(x='', y=ESTADO_LICENCIAMIENTO, fill=ESTADO_LICENCIAMIENTO)) + 
-                        geom_bar(stat='identity', color='white') + coord_polar(theta='y')
+                        geom_bar(stat='identity', color='white') + coord_polar(theta='y') + labs(title='Pie de Licenciamiento')
 grafico2
 # Interpretacion: Muestra un pie con los percentajes de las licencias otorgadas (o denegadas) a las Universidades segun la SUNEDU
+# Se puede ver como la mayoria de universidades fueron licenciadas, con mas del 55% son solo licenciaturas otorgadas.
 
 
 # 3- Cuantas universidades por departamento hay
