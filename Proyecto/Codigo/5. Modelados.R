@@ -20,7 +20,14 @@ plot(vinos$density, vinos$fixed.acidity)
 # Te muestra la linea de regresion
 abline(R, col="red", lwd=2)
 
+# Interpretación: Usamos la función de lm() para saber la regresión lineal de 2 variables (he ahi "lineal") luego ploetamos las variables solas
+# y por ultimo dibujamos la linea de la regresion usando la función creada anteriormente llamada R
+
+
+##########################################################
 ############### Regresion polinomial #####################
+##########################################################
+
 # para ver la regresion del fixed.acidity en relacion a las otras 3 variables
 # citric.acid, density, pH
 
@@ -41,6 +48,11 @@ error <- mean(abs(100*((probar$prediccion - probar$fixed.acidity)/ probar$predic
 
 accuracy <- 100 - error
 accuracy
+
+# Interpretacion: Primero, tenemos que dividir en dos nuestro dataset unos con el que se entranará (70% del dataset) y los demás resptantes
+# se usarán para probar o testear. Se tiene que seleccionar las columnas que uno quiere usar para predecir. Se usó también la función por 
+# defecto de R lm(). Además también se uso la función predict() para predecir con respecto a las demas variables. Por ultimo, sacamos el error
+# para saber cual es el accuracy. En nuestro caso es 92%, siendo un buen resultado de predicción.
 
 
 #############################################
@@ -120,7 +132,11 @@ s.corcircle(componentes[,c(1,1)])
 # El grupo que esta mas relacionado entre si es el Segundo y tercero, ya que se ven que son los mas cercanos entre si, ademas de separados del
 # resto.
 
-####################### Knn para shiny ##################
+
+#####################################################
+################### Knn función #####################
+#####################################################
+
 library(ggplot2)
 NROW(vinos) 
 view(vinos)
@@ -183,4 +199,6 @@ a*100/total
 b*100/total
 c*100/total
 
-# Interpretacion: 
+# Interpretacion: Esta función creada por nosotros (inspirada por la functión hecha en clase) crea 3 categorias (o grupos) de un dataframe
+# además, ya que las categorias se crean con relacion a la variable 'x', se incorporó una manera de hacer las categorias de manera dinamica
+# es decir, multiplicamos x * 0.4, y asi sucesivamente, para no tener que digitar hasta donde quieres cada categoria de manera manual.
