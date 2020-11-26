@@ -64,7 +64,7 @@ grafico5 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minim
 grafico5
 # Interpretacion: Muestra la cantidad de carnes para cada universidad (todas licenciada)
 
-as <- resumen_sunedu %>% select(NOMBRE) %>% filter(CANTIDAD_CARNES > 1000)
+
 # 6- Cantidad de programas por Universidad 
 aux2 <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_programas = sum(PROGRAMAS_TOTAL))
 grafico6 <- ggplot(aux2, aes(y=NOMBRE, x=suma_programas, fill=NOMBRE)) + theme_minimal()+
@@ -129,7 +129,7 @@ query2 <- carnes %>%
 grafico11 <- ggplot(query2, aes(y=NOMBRE_UNIVERSIDAD, x=CANTIDAD_CARNES, fill=NOMBRE_UNIVERSIDAD)) + theme_minimal() + 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Numero de estudiantes', 
-                            title='Numero de estudiantes por universidades con mas de 1000')
+                            title='Numero de estudiantes por universidades con mas de 1000 estudiantes')
 grafico11
 # Interpretacion: Muestra la cantidad de alumnos por universidad. Se puede ver como La vallejo gana por goleada a comparacion de cualquier otra
 # Seguido de la Universidad Alas Peruanas. Las dos universidades con menor numero de estudiantes son: Universidad Catolica Sedes Sapientiae y 
@@ -200,37 +200,38 @@ grafico17
 # Interpretacion: Se puede ver que la mayor frecuencia esta entre 0 y los 1000 carnes de universidades licenciadas
 
 # 18- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
-# Sin outliers
-d <- resumen_sunedu %>% select(NOMBRE, CANTIDAD_CARNES) %>% filter(CANTIDAD_CARNES > mean(CANTIDAD_CARNES))
-dat <- ggplot(d, aes(y=CANTIDAD_CARNES, x=NOMBRE, fill=NOMBRE)) + geom_boxplot()
-dat
+# Con outliers
+boxplot(resumen_sunedu$CANTIDAD_CARNES, 
+        outline = FALSE, col='green', horizontal = TRUE, ylab="Cantidad de Carnes")
 boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
-        resumen_sunedu$CANTIDAD_CARNES, outline = FALSE)
-# Interpretacion: Programas y carnes sin outliers  con diagrama de bloque
+        outline = FALSE, col='yellow', horizontal = TRUE, ylab="Cantidad de Programas")
+# Interpretacion: Programas y carnes Con outliers con diagrama de bloque
 
 # 19- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
-# Con outliers
+# Sin outliers
+boxplot(resumen_sunedu$CANTIDAD_CARNES,
+         col='blue', horizontal = TRUE, outliers = TRUE, ylab='Cantidad de Carnes')
 boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
-        resumen_sunedu$CANTIDAD_CARNES)
-# Interpretacion: Programas y carnes Con outliers con diagrama de bloque
-# Se puede ver como la cantidad de carnes es la que cuenta con mas outliers y con cantidad
+        col='red', horizontal = TRUE, outliers = TRUE, ylab='Cantidad de Programas')
+# Interpretacion: Programas y carnes sin outliers  con diagrama de bloque
+# Se puede ver como la cantidad de carnes es la que cuenta con mas outliers y con cantidad de 6 outliers
+
+# 20- Histograma de frecuencua de programas de universidades
+grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL)) + 
+                        geom_histogram(binwidth=14, color='black', fill='red') + labs(x='Programas Totales', 
+                        title='Histograma de frecuencua de programas de universidades')
+grafico20
+# Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100. 
+#Además entre 440 y 500 hay un hueco donde hay 0 programas
 
 # 20- Diagrama de dispercion entre los programas y la cantidad de carnes
-grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CARNES)) + geom_point(color="blue") + 
+grafico21 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CARNES)) + geom_point(color="blue") + 
                     labs(y='Carnes', x='Programas', 
                     title="Diagrama de Disperción Entre Programas y Carnes")
-grafico20
+grafico21
 # Interpretacion: Grafico de dispercion entre los programas totales y los carnes. Se puede ver como el grafico va en forma de cono para afuera
 # Este modelo hasta podria servir para ciertos modelados que se han realizado en clase
 
-
-# 21- Histograma de frecuencua de programas de universidades
-grafico21 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL)) + 
-                        geom_histogram(binwidth=10, color='black', fill='red') + labs(x='Programas Totales', 
-                        title='Histograma de frecuencua de programas de universidades')
-grafico21
-# Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100. 
-#Además entre 440 y 500 hay un hueco donde hay 0 programas
 
 # 22- Grafico programas vs carnes (programas <= 200 y carnes <= 20000)
 s <- resumen_sunedu %>% select(PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>% 
@@ -244,6 +245,61 @@ grafico22
 # algo acertada, como se puede ver en la gráfica. Mientras que la logarítmica es menos acertada, salvo en los primeros puntos
 
 
-
+#############################################################
 ######################## PARA VIDEO #########################
+#############################################################
 
+# 20- Histograma de frecuencua de programas de universidades
+grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL)) + 
+                        geom_histogram(binwidth=14, color='black', fill='red') + labs(x='Programas Totales', 
+                        title='Histograma de frecuencua de programas de universidades')
+grafico20
+# Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100. 
+#Además entre 440 y 500 hay un hueco donde hay 0 programas
+
+# 2- grafico de pie de licenciamiento de universidades
+grafico2 <- ggplot(licenciamiento, aes(x='', y=ESTADO_LICENCIAMIENTO, fill=ESTADO_LICENCIAMIENTO)) + 
+                        geom_bar(stat='identity', color='white') + coord_polar(theta='y')
+grafico2
+# Interpretacion: Muestra un pie con los percentajes de las licencias otorgadas (o denegadas) a las Universidades segun la SUNEDU
+
+grafico3.5 <- ggplot(licenciamiento, aes(x=DEPARTAMENTO_LOCAL, y='', fill=DEPARTAMENTO_LOCAL)) + 
+                geom_bar(stat='identity', color='white') + coord_polar(theta='x') + 
+                 labs(y='',x='Departamentos', 
+                        title='Universidades según departamento')
+grafico3.5
+
+# 6- Cantidad de programas por Universidad 
+aux2 <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_programas = sum(PROGRAMAS_TOTAL))
+grafico6 <- ggplot(aux2, aes(y=NOMBRE, x=suma_programas, fill=NOMBRE)) + theme_minimal()+
+                    geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + 
+                    labs(y='Universidades',x='Programas', title='Numero de Programas por Universidad')
+grafico6
+# Interpretacion: Muestra la cantidad de programas/calses para cada universidad (todas licenciada). Se puede ver como La Cayetano es la Universidad
+# que mas programas tiene, y la que menos tiene es la Unviersidad Jaime Bausate y Meza
+
+# 7- Periodo de licenciamiento segun tipo de gestion
+aux3 <- licenciamiento %>% group_by(TIPO_GESTION) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
+grafico7 <- ggplot(aux3, aes(y='',x=suma_lic, fill=TIPO_GESTION)) + 
+                geom_bar(stat="identity", color='white') + coord_polar(theta='x')
+                        labs(y='Publico vs Privado',x='Numero de años totales en licenciamiento', 
+                        title='Comparativa entre numero de licenciamientos entre Público y Privado')
+grafico7
+# Interpretacion: Comparativa entre las licenciaciones publicas vs las privadas. Mas licenciadas hay publicas que privadas, auque la diferencia
+# es minima
+
+# 11- Universidades privadas que tienen mas de 10000 estudiantes
+query2 <- carnes %>%
+				select(NOMBRE_UNIVERSIDAD, TIPO_GESTION, Cant_Carnes) %>%
+				filter(TIPO_GESTION == 'PRIVADO') %>%
+				group_by(NOMBRE_UNIVERSIDAD, TIPO_GESTION) %>%
+				summarize(CANTIDAD_CARNES = sum(Cant_Carnes)) %>%
+				filter(CANTIDAD_CARNES > 10000)
+grafico11 <- ggplot(query2, aes(y=NOMBRE_UNIVERSIDAD, x=CANTIDAD_CARNES, fill=NOMBRE_UNIVERSIDAD)) + theme_minimal() + 
+                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    labs(y='Universidades', x='Numero de estudiantes', 
+                            title='Numero de estudiantes por universidades con mas de 1000 estudiantes')
+grafico11
+# Interpretacion: Muestra la cantidad de alumnos por universidad. Se puede ver como La vallejo gana por goleada a comparacion de cualquier otra
+# Seguido de la Universidad Alas Peruanas. Las dos universidades con menor numero de estudiantes son: Universidad Catolica Sedes Sapientiae y 
+# la Telesup
