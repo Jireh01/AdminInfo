@@ -55,9 +55,9 @@ grafico5
 # y por ultimo 10
 
 # 6- Cantidad de carnes por univeridad --------------------------------------------------------
-aux <- resumen_sunedu %>% select(NOMBRE) %>% filter(CANTIDAD_CARNES > 10000) %>% 
+au <- resumen_sunedu %>% select(NOMBRE, CANTIDAD_CARNES) %>% filter(CANTIDAD_CARNES > 10000) %>% 
                         summarise(suma_canres = sum(CANTIDAD_CARNES))
-grafico6 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+
+grafico6 <- ggplot(au, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+
                     geom_bar(stat="identity",width = 0.5,show.legend = FALSE) + 
                         labs(y='Universidades',x='Carnes', 
                         title='Numero de carnes por Universidad')
