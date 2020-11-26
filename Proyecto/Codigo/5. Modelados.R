@@ -8,7 +8,11 @@ vinos <- read.csv("Datasets/0-Descargados/winequality-red.csv")
 v <- cor(vinos)
 corrplot(v)
 view(vinos)
+
+##########################################################
 #################### Regresion Lineal ####################
+##########################################################
+
 # Regresion lineal (en el shiny las variables las pone el usuario)
 R = lm(vinos$fixed.acidity~vinos$density)
 # ploteal los puntos
@@ -22,8 +26,8 @@ abline(R, col="red", lwd=2)
 
 ids <- sample(1:nrow(vinos),size=nrow(vinos)*0.7,replace = FALSE)
 
-entrenamiento <- vinos[ids, c(1,3,8,9)]
-probar <- vinos[-ids, c(1,3,8,9)]
+entrenamiento <- vinos[ids, c(1,3,8,9)] # se escogen las columnas que se evaluarán (70%)
+probar <- vinos[-ids, c(1,3,8,9)] # se escogen las columnas que se evaluarán (30%)
 
 ft = lm(fixed.acidity~ citric.acid + density + pH, data=entrenamiento)
 
@@ -39,7 +43,10 @@ accuracy <- 100 - error
 accuracy
 
 
+#############################################
 ################### KNN #####################
+#############################################
+
 library(ggplot2)
 library(class)
 plot()
@@ -58,7 +65,15 @@ knn <- knn(train=train, test=test, cl=train.labels, k = 10, prob=TRUE)
 accuracy.fin <- 100 * sum(train.labels == knn)/NROW(test.labels)
 accuracy.fin
 
+# Interpretacion: Para la primera version del knn (la segunda se encuentra al final) se uso la función por defecto de R. Con este modelo 
+# Se entrena un dataset (70%) y luego se testea ese mismo dataset (30%), se puede ver en el knn los resultados para cada uno. Luego calculamos
+# el margen de error, que en este caso es alto, con 59.58%. Lo recomendado es entre 80% y 95% 
+
+
+#############################################
 ################### KMeans ##################
+#############################################
+
 corrplot(v)
 plot(vinos$free.sulfur.dioxide, vinos$sulphates)
 df <- data.frame(vinos$free.sulfur.dioxide, vinos$sulphates)
@@ -67,8 +82,15 @@ kmeans <- kmeans(df, 7)
 plot(df, col = kmeans$cluster)
 points(kmeans$centers, col = 1:2, pch = 8, cex = 2)
 
+# Interpretacion: Se puede ver como cuando tenemos 7 cluster, la funcion kmeans, automaticamente se visualizan los 7 cluster. Además se puede
+# ver como los cluster no estan en la misma posicion, sino que estan de acuerdo a al promedio de las distancias de todos los puntos dentro de
+# ese grupo o categoria. Para cambiar los valores y los clusters, solo modifique los x,y de df y el numero en la función kmeans
 
+#############################################
 ################### PCA #####################
+#############################################
+
+# normalizacion de los datos: estandarizacion(variables - promedio)/desv
 vinosPCA <- scale(vinos)
 pca <- prcomp(vinosPCA)
 str(pca)
@@ -83,49 +105,20 @@ individuos <- pca[[5]][,c(1:4)]
 #install.packages("ade4") 
 library(ade4)
 # analisis de cluster del componente c1 y c2
-s.corcircle(componentes[,c(1,2)]) #Todos los componentes de la col 1 y 2
-#cuales son los regristros que indican el grado de participacion
-
+s.corcircle(componentes[,c(1,2)]) #Todos los componentes de la col 1 y 2 
+s.corcircle(componentes[,c(1,3)])
 s.corcircle(componentes[,c(1,4)])
+s.corcircle(componentes[,c(1,1)])
 
-
-################### SVM #####################
-library(e1071)
-
-x1 <- vinos$total.sulfur.dioxide
-y1 <- vinos$free.sulfur.dioxide
-
-x2 <- vinos$fixed.acidity
-y2 <- vinos$residual.sugar
-
-dff <- data.frame(x1, y1 = as.factor(y1))
-dff2 <- data.frame(x2, y2 = as.factor(y2))
-
-m <- svm(y1~., data = dff, 
-               kernel = "linear", 
-               cost = 5, 
-               scale = FALSE)
-
-m2 <- svm(y2~., data = dff2, 
-               kernel = "radial", 
-               cost = 16, 
-               scale = FALSE)
-
-plot(m, dff)
-plot(m2, dff2)
-summary(m)
-summary(m2)
-
-vino$total.sulfur.dioxide = factor(vino$total.sulfur.dioxide)
-set.seed(2020)
-t.ids<- createDataPartition(vino$total.sulfur.dioxide, p=0.7, list = F)
-mod <- svm(total.sulfur.dioxide ~ .,data = vino[t.ids, ])
-table(vino[t.ids, "total.sulfur.dioxide"], fitted(mod), dnn = c("Actual", "Predicho"))
-pred <- predict(mod, vino[-t.ids,])
-table(vino[-t.ids,"total.sulfur.dioxide"], pred, dnn =c("Actual", "Predicho"))
-
-plot(mod,data=vino[t.ids,], skew ~ variance)
-
+# Interpretacon: PCA o "Principal Component Analysis", en nuestro caso, en las componentes[,c(1,2)] se puede ver como hay 4 grupos, 3 de ellos
+# bien marcados:
+# Primer grupo: pH (Oeste)
+# Segundo grupo: alcohol, quality (Sur)
+# Tercer grupo: sulphates, citric.acid, fixed.acidity (Este)
+# Cuarto grupo: Volatile.acidity, total.sulfur.dioxide, residual.sulfur (Norte)
+# El grupo menos relacionado es el cuarto, donde no se ve muy bien y no se marca, ya que cubre mucho espacio y hay mucha diferencia entre si
+# El grupo que esta mas relacionado entre si es el Segundo y tercero, ya que se ven que son los mas cercanos entre si, ademas de separados del
+# resto.
 
 ####################### Knn para shiny ##################
 library(ggplot2)
@@ -189,3 +182,5 @@ total<-(a+b+c)
 a*100/total
 b*100/total
 c*100/total
+
+# Interpretacion: 

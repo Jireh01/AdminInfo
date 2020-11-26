@@ -22,8 +22,9 @@ grafico
 # Interpretacion: Muestra que filia esta asociada a las universidades publicas con la carrea Mecatronica
 
 # 2- grafico de pie de licenciamiento de universidades
-grafico2 <- pie(table(licenciamiento$ESTADO_LICENCIAMIENTO), 
-                    main = "Licenciamiento de Universidades")
+grafico2 <- ggplot(licenciamiento, aes(x='', y=ESTADO_LICENCIAMIENTO, fill=ESTADO_LICENCIAMIENTO)) + 
+                        geom_bar(stat='identity', color='white') + coord_polar(theta='y')
+grafico2
 # Interpretacion: Muestra un pie con los percentajes de las licencias otorgadas (o denegadas) a las Universidades segun la SUNEDU
 
 
@@ -32,14 +33,16 @@ grafico3 <- ggplot(licenciamiento, aes(x=licenciamiento$NOMBRE, y=licenciamiento
                 geom_bar(stat='identity', color='white') + labs(y = "Departamentos", x = "Universidades",
                 title='Universidades por departamento')
 grafico3
-# Interpretacion: Cuantas universidades hay por departamento con puntos 
+# Interpretacion: Cuantas universidades hay por departamento con barras. Se puede ver como LIMA es la que cuenta con mas universidades.
+# Sin embargo es complicado ver las demas, por lo que se creo el grafico de pie.
 
 # 3.5- Cuantas universidades por departamento hay en porcentaje (pie)
-grafico3.5 <- ggplot(licenciamiento, aes(x='', y=DEPARTAMENTO_LOCAL, fill=DEPARTAMENTO_LOCAL)) + 
-                geom_bar(stat='identity', color='white') + coord_polar(theta='y') + 
-                 labs(y='Departamentos',x='', 
+grafico3.5 <- ggplot(licenciamiento, aes(x=DEPARTAMENTO_LOCAL, y='', fill=DEPARTAMENTO_LOCAL)) + 
+                geom_bar(stat='identity', color='white') + coord_polar(theta='x') + 
+                 labs(y='',x='Departamentos', 
                         title='Universidades según departamento')
 grafico3.5
+# Interpretacion: Se puede ver como en segundo lugar esta La Libertad y Junin empatados, y en tercer lugar esta Arequipa
 
 # 4- Porcentaje de periodos de licenciamiento
 y <- licenciamiento %>% group_by(PERIODO_LICENCIAMIENTO, ESTADO_LICENCIAMIENTO) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
@@ -48,11 +51,12 @@ grafico4 <- ggplot(y, aes(y='',x=suma_lic, fill=PERIODO_LICENCIAMIENTO)) +
                         labs(y='Publico vs Privado',x='Numero de años totales en licenciamiento', 
                         title='Periodo de licenciamiento de Universidades')
 grafico4
-# Interpretacion: Porcentaje de periodos de licenciamiento contando el 0, el que mas porcentaje tiene es 6 años
+# Interpretacion: Porcentaje de periodos de licenciamiento contando el 0, el que mas porcentaje tiene es 6 años, luego sigue 8 
+# y por ultimo 10
 
 # 5- Cantidad de carnes por univeridad --------------------------------------------------------
 aux <- resumen_sunedu %>% select(NOMBRE) %>% filter(CANTIDAD_CARNES > 10000) %>% 
-                            summarise(suma_canres = sum(CANTIDAD_CARNES))
+                        summarise(suma_canres = sum(CANTIDAD_CARNES))
 grafico5 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+
                     geom_bar(stat="identity",width = 0.5,show.legend = FALSE) + 
                         labs(y='Universidades',x='Carnes', 
@@ -60,7 +64,7 @@ grafico5 <- ggplot(aux, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minim
 grafico5
 # Interpretacion: Muestra la cantidad de carnes para cada universidad (todas licenciada)
 
-
+as <- resumen_sunedu %>% select(NOMBRE) %>% filter(CANTIDAD_CARNES > 1000)
 # 6- Cantidad de programas por Universidad 
 aux2 <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_programas = sum(PROGRAMAS_TOTAL))
 grafico6 <- ggplot(aux2, aes(y=NOMBRE, x=suma_programas, fill=NOMBRE)) + theme_minimal()+
@@ -99,17 +103,20 @@ grafico9 <- ggplot(aux5, aes(y=NOMBRE, x=suma_lic, fill=NOMBRE)) + theme_minimal
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Periodo de licenciamiento', title='Periodo de Licenciamiento según Departamento')
 grafico9
-# Interpretacion: Muestra cual es la licenciatura de las universidades (solo se concideran las que la tienen otorgada)
+# Interpretacion: Muestra cual es la licenciatura de las universidades (solo se concideran las que la tienen otorgada). Se puede ver como 
+# La PUCP, UNI, San Marcos y UPC, son las 4 universidades que cuentan con licencias de 10 años
 
 
 # 10- Universidades que tienen mas de 7 años de licencia activa 
 query <- licenciamiento %>%
 						select(NOMBRE, ESTADO_LICENCIAMIENTO, PERIODO_LICENCIAMIENTO) %>% 
 						filter(ESTADO_LICENCIAMIENTO == 'LICENCIA OTORGADA', PERIODO_LICENCIAMIENTO >= 7)
-grafico10 <- ggplot(query, aes(y=NOMBRE, x=PERIODO_LICENCIAMIENTO, fill=NOMBRE)) + theme_minimal() + geom_bar(stat='identity') + 
+grafico10 <- ggplot(query, aes(y=NOMBRE, x=PERIODO_LICENCIAMIENTO, fill=NOMBRE)) + theme_minimal() + 
+                geom_bar(stat='identity',width = 0.2,,show.legend = FALSE) + 
                 labs(y='Universidad', x='Periodo Licenciamiento', title='Universidades que cuentan con mas de 7 años de Licenciamiento')
 grafico10
-# Interpretacion: Muestra si las universidades tienen 8 o 10 meses. Se puede ver que mas hay con 8 años de licenciamiento que 10 
+# Interpretacion: Muestra si las universidades tienen 8 o 10 meses. Se puede ver que mas hay con 8 años de licenciamiento que 10.
+# Además podemos comparar con el grafico 9, se puede ver la drastica reducción de univerisdades que tienen mas de 7 años.
 
 
 # 11- Universidades privadas que tienen mas de 10000 estudiantes
@@ -125,7 +132,8 @@ grafico11 <- ggplot(query2, aes(y=NOMBRE_UNIVERSIDAD, x=CANTIDAD_CARNES, fill=NO
                             title='Numero de estudiantes por universidades con mas de 1000')
 grafico11
 # Interpretacion: Muestra la cantidad de alumnos por universidad. Se puede ver como La vallejo gana por goleada a comparacion de cualquier otra
-# Seguido de la Universidad Alas Peruanas. 
+# Seguido de la Universidad Alas Peruanas. Las dos universidades con menor numero de estudiantes son: Universidad Catolica Sedes Sapientiae y 
+# la Telesup
 
 
 # 12- Estudiantes en total de cada departamento del Peru que supera el promedio de estudiantes por departamento
@@ -136,10 +144,10 @@ query <- carnes %>%
 grafico12 <- ggplot(query, aes(x=DEPARTAMENTO_FILIAL, y=CANTIDAD, fill=DEPARTAMENTO_FILIAL)) + 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Estudiantes', x='Departamento', 
-                        title='Numero de estudiantes que superan el promedio en Departamento')
+                        title='Departamentos que superan el numero de estudiantes promedio')
 grafico12
-# Interpretacion: Muestra los estudiantes por cada departamento que suepera el promedio por departamento. S
-# in sorpresa, Lima gana por lejos a comparacion de los demas
+# Interpretacion: Muestra los estudiantes por cada departamento que suepera el promedio por departamento. Sin sorpresa, Lima gana por lejos 
+# a comparacion de los demas. Luego le sigue Arequipa, La Libertad y por ultimo Junin, aunque los 3 tienen cantidad cercanas.
 
 
 # 13- Universidades que tienen mas del promedio de programas totales
@@ -193,6 +201,9 @@ grafico17
 
 # 18- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
 # Sin outliers
+d <- resumen_sunedu %>% select(NOMBRE, CANTIDAD_CARNES) %>% filter(CANTIDAD_CARNES > mean(CANTIDAD_CARNES))
+dat <- ggplot(d, aes(y=CANTIDAD_CARNES, x=NOMBRE, fill=NOMBRE)) + geom_boxplot()
+dat
 boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
         resumen_sunedu$CANTIDAD_CARNES, outline = FALSE)
 # Interpretacion: Programas y carnes sin outliers  con diagrama de bloque
@@ -231,3 +242,8 @@ grafico22 <- ggplot(s, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CAR
 grafico22
 # Interpretacion: Cuando los programas son 200 o menos y los carnes 20000 o menos, se puede llegar a sacar una regresion lineal 
 # algo acertada, como se puede ver en la gráfica. Mientras que la logarítmica es menos acertada, salvo en los primeros puntos
+
+
+
+######################## PARA VIDEO #########################
+
