@@ -1,4 +1,7 @@
 library(ggplot2)
+#install.packages("plotly")
+library(plotly)
+library(dplyr)
 
 # Cargamos los data.frames
 licenciamiento <- read.csv("Datasets/2-Preprocesados/licenciamiento.csv")
@@ -17,7 +20,6 @@ grafico <- ggplot(q3, aes(y=NOMBRE, x=NOMBRE_FILIAL)) +
 grafico
 # Interpretacion: Muestra que filia esta asociada a las universidades publicas con la carrea Mecatronica
 
-
 # 2- grafico de pie de licenciamiento de universidades
 grafico2 <- pie(table(licenciamiento$ESTADO_LICENCIAMIENTO), 
                     main = "Licenciamiento de Universidades")
@@ -25,17 +27,26 @@ grafico2 <- pie(table(licenciamiento$ESTADO_LICENCIAMIENTO),
 
 
 # 3- Cuantas universidades por departamento hay
-grafico3 <- ggplot(licenciamiento, aes(licenciamiento$NOMBRE, licenciamiento$DEPARTAMENTO_LOCAL)) + 
-                geom_point() + labs(y = "Departamentos", x = "Universidades")
+grafico3 <- ggplot(licenciamiento, aes(x=licenciamiento$NOMBRE, y=licenciamiento$DEPARTAMENTO_LOCAL, fill=DEPARTAMENTO_LOCAL)) + 
+                geom_bar(stat='identity', color='white') + labs(y = "Departamentos", x = "Universidades")
 grafico3
-# Interpretacion: Cuantas universidades hay por departamento con puntos
+# Interpretacion: Cuantas universidades hay por departamento con puntos 
 
+# 3.5- Cuantas universidades por departamento hay en porcentaje (pie)
+grafico3.5 <- ggplot(licenciamiento, aes(x='', y=DEPARTAMENTO_LOCAL, fill=DEPARTAMENTO_LOCAL)) + 
+                geom_bar(stat='identity', color='white') + coord_polar(theta='y') + 
+                 labs(y='Departamentos',x='', 
+                        title='Universidades Segun departamento')
+grafico3.5
 
 # 4- Porcentaje de periodos de licenciamiento
-grafico4 <- pie(table(licenciamiento$PERIODO_LICENCIAMIENTO), 
-                main = "Periodo de licenciamiento de Universidades")
+y <- licenciamiento %>% group_by(PERIODO_LICENCIAMIENTO) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
+grafico4 <- ggplot(y, aes(y='',x=suma_lic, fill=PERIODO_LICENCIAMIENTO)) + 
+                geom_bar(stat="identity", color='white') + coord_polar(theta='x')
+                        labs(y='Publico vs Privado',x='Numero de años totales en licenciamiento', 
+                        title='Periodo de licenciamiento de Universidades')
+grafico4
 # Interpretacion: Porcentaje de periodos de licenciamiento contando el 0, el que mas porcentaje tiene es 6 años
-
 
 # 5- Cantidad de carnes por univeridad 
 aux <- resumen_sunedu %>% select(NOMBRE) %>% filter(CANTIDAD_CARNES > 10000) %>% 
@@ -56,11 +67,11 @@ grafico6 <- ggplot(aux2, aes(y=NOMBRE, x=suma_programas, fill=NOMBRE)) + theme_m
 grafico6
 # Interpretacion: Muestra la cantidad de programas/calses para cada universidad (todas licenciada)
 
-
+ 
 # 7- Periodo de licenciamiento segun tipo de gestion
 aux3 <- licenciamiento %>% group_by(TIPO_GESTION) %>% summarise(suma_lic=sum(PERIODO_LICENCIAMIENTO))
-grafico7 <- ggplot(aux3, aes(y=TIPO_GESTION,x=suma_lic, fill=TIPO_GESTION)) + 
-                geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+grafico7 <- ggplot(aux3, aes(y='',x=suma_lic, fill=TIPO_GESTION)) + 
+                geom_bar(stat="identity", color='white') + coord_polar(theta='x')
                         labs(y='Publico vs Privado',x='Numero de años totales en licenciamiento', 
                         title='Comparativa entre numero de licenciamientos entre Público y Privado')
 grafico7
@@ -154,13 +165,12 @@ hist(resumen_sunedu$PERIODO_LICENCIAMIENTO,
 
 # 16- Universidades que tienen mas del promedio de programas totales y que cuentan con licencia 
 query <- resumen_sunedu %>% select(NOMBRE,PROGRAMAS_TOTAL) %>% filter(PROGRAMAS_TOTAL > mean(PROGRAMAS_TOTAL))
-grafico16 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL), fill=NOMBRE) + 
+grafico16 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE)) + 
                 geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                 labs(y='Universidades', x='Programas', 
                     title='Universidades que tienen mas del promedio de programas')
 grafico16
 # Interpretacion: Otra vez, gana Cayetano con mas del promedio de programas y que cuentan con licencia
-
 
 # 17- Hiatograma de frecuencia de carnes universitarios
 hist(resumen_sunedu$CANTIDAD_CARNES, main='Hiatograma de frecuencia de carnes universitarios')
@@ -181,7 +191,7 @@ boxplot(resumen_sunedu$PROGRAMAS_TOTAL,
 # Se puede ver como la cantidad de carnes es la que cuenta con mas outliers y con cantidad
 
 # 20- Diagrama de dispercion entre los programas y la cantidad de carnes
-grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES)) + geom_point(color="blue") + 
+grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CARNES)) + geom_point(color="blue") + 
                     labs(y='Carnes', x='Programas', 
                     title="Diagrama de Disperción Entre Programas y Carnes")
 grafico20
@@ -190,6 +200,20 @@ grafico20
 
 
 # 21- Histograma de frecuencua de programas de universidades
-hist(resumen_sunedu$PROGRAMAS_TOTAL, 
-        main='Histograma de frecuencua de programas de universidades')
-# Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100
+grafico20 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL)) + 
+                        geom_histogram(binwidth=10) + labs(x='Programas Totales', 
+                        title='Histograma de frecuencua de programas de universidades')
+grafico20
+# Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100. 
+#Además entre 440 y 500 hay un hueco donde hay 0 programas
+
+# 22- Grafico programas vs carnes (programas )
+s <- resumen_sunedu %>% select(PROGRAMAS_TOTAL, CANTIDAD_CARNES) %>% 
+                        filter(PROGRAMAS_TOTAL <= 200, CANTIDAD_CARNES <= 20000)
+grafico21 <- ggplot(s, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CARNES)) + geom_point(color="blue") + 
+                    stat_smooth(method='lm', aes(colour='linear')) + stat_smooth(method='lm', formula = y ~ log(x)) + 
+                    labs(y='Carnes', x='Programas', 
+                    title="Diagrama de Disperción Entre Programas (<=200) y Carnes(<=20000)")
+grafico21
+# Interpretacion: Cuando los programas son 200 o menos y los carnes 20000 o menos, se puede llegar a sacar una regresion lineal 
+# algo acertada, como se puede ver en la gráfica. Mientras que la logarítmica es menos acertada, salvo en los primeros puntos

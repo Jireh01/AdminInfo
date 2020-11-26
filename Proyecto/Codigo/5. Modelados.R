@@ -4,6 +4,7 @@ library(ggplot2)
 
 vinos <- read.csv("Datasets/0-Descargados/winequality-red.csv")
 
+
 v <- cor(vinos)
 corrplot(v)
 view(vinos)
@@ -130,7 +131,7 @@ plot(mod,data=vino[t.ids,], skew ~ variance)
 library(ggplot2)
 NROW(vinos) 
 view(vinos)
-x <- vinos$volatile.acidity # cambiar variables en el shiny
+x <- resumen_sunedu # cambiar variables en el shiny
 y <- vinos$density # cambiar variables en el shiny
 
 dataframe = data.frame(x, y)
