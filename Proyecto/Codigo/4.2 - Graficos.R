@@ -55,9 +55,8 @@ grafico5
 # Interpretacion: Porcentaje de periodos de licenciamiento contando el 0, el que mas porcentaje tiene es 6 años, luego sigue 8 
 # y por ultimo 10
 
-# 6- Cantidad de carnes por univeridad --------------------------------------------------------
-au <- resumen_sunedu %>% select(NOMBRE, CANTIDAD_CARNES) %>% filter(CANTIDAD_CARNES > 10000) %>% 
-                        summarise(suma_canres = sum(CANTIDAD_CARNES))
+# 6- Cantidad de carnes por univeridad 
+au <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_canres = sum(CANTIDAD_CARNES))
 grafico6 <- ggplot(au, aes(y=NOMBRE, x=suma_canres, fill=NOMBRE)) + theme_minimal()+
                     geom_bar(stat="identity",width = 0.5,show.legend = FALSE) + 
                         labs(y='Universidades',x='Carnes', 
@@ -95,7 +94,7 @@ grafico9 <- ggplot(aux4, aes(y=DEPARTAMENTO_LOCAL, x=suma_lic, fill=DEPARTAMENTO
                     title='Periodo de Licenciamiento según Departamento')
 grafico9
 # Interpretacion: La maxima cantidad de periodos por deparamento. Se suman todos los periodos (estan en años). Se puede ver como LIMA sobre pasa
-# al resto de departamentos por mucho, teniendo mas de 250 años acumulados en licenciamientos
+# al resto de departamentos por mucho, teniendo mas de 250 años acumulados en licenciamientos. 
 
 
 # 10- Periodo de licenciamiento segun cada universidad
@@ -116,11 +115,11 @@ grafico11 <- ggplot(query, aes(y=NOMBRE, x=PERIODO_LICENCIAMIENTO, fill=NOMBRE))
                 geom_bar(stat='identity',width = 0.2,,show.legend = FALSE) + 
                 labs(y='Universidad', x='Periodo Licenciamiento', title='Universidades que cuentan con mas de 7 años de Licenciamiento')
 grafico11
-# Interpretacion: Muestra si las universidades tienen 8 o 10 meses. Se puede ver que mas hay con 8 años de licenciamiento que 10.
+# Interpretacion: Muestra si las universidades tienen 8 o 10 meses. Se puede ver que mas hay con 8 años de licenciamiento que 10 (aunque no por mucho).
 # Además podemos comparar con el grafico 9, se puede ver la drastica reducción de univerisdades que tienen mas de 7 años.
 
 
-# 12- Universidades privadas que tienen mas de 10000 estudiantes
+# 12- Universidades privadas que tienen mas de 10000 estudiantes y cuantos estudiantes tienen por universidad
 query2 <- carnes %>%
 				select(NOMBRE_UNIVERSIDAD, TIPO_GESTION, Cant_Carnes) %>%
 				filter(TIPO_GESTION == 'PRIVADO') %>%
@@ -158,7 +157,7 @@ query <- resumen_sunedu %>%
 grafico14 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE))+ 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Programas', 
-                        title='Universidades con mas del promedio de carnes y programas')
+                        title='Universidades con mas del promedio de programas')
 grafico14
 # Interpretacion: Universidades que tienen mas del promedio de programas, se puede ver que la cayetano gana por casi 700.
 
@@ -170,7 +169,7 @@ query <- resumen_sunedu %>%
 grafico15 <- ggplot(query, aes(y=NOMBRE, x=CANTIDAD_CARNES, fill=NOMBRE))+ 
                     geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
                     labs(y='Universidades', x='Carnes', 
-                        title='Numero de estudiantes que superan el promedio en su departamento')
+                        title='Universidades que no superan el promedio de carnes')
 grafico15
 # Interpretacion: Univesidades que tienen menos del promedio de carnes, puede ver como la cayetano supera a los demas por también
 # Por 700 carnes, El promedio es 10000 aproximadamente
@@ -229,7 +228,7 @@ grafico23 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL)) +
                         title='Histograma de frecuencua de programas de universidades')
 grafico23
 # Interpretacion: La mayor frecuencia de programas se encuentra entre el rango 0 y 100. 
-#Además entre 440 y 500 hay un hueco donde hay 0 programas
+# Además entre 440 y 500 hay un hueco donde hay 0 programas
 
 # 24- Diagrama de dispercion entre los programas y la cantidad de carnes
 grafico24 <- ggplot(resumen_sunedu, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CARNES)) + geom_point(color="blue") + 
@@ -250,6 +249,29 @@ grafico25 <- ggplot(s, aes(PROGRAMAS_TOTAL, CANTIDAD_CARNES, colour=CANTIDAD_CAR
 grafico25
 # Interpretacion: Cuando los programas son 200 o menos y los carnes 20000 o menos, se puede llegar a sacar una regresion lineal 
 # algo acertada, como se puede ver en la gráfica. Mientras que la logarítmica es menos acertada, salvo en los primeros puntos
+
+# 26- Universidades con mayor promedio de carnes 
+query <- resumen_sunedu %>%
+						select(NOMBRE, CANTIDAD_CARNES) %>% 
+                                                filter(CANTIDAD_CARNES > mean(CANTIDAD_CARNES))
+grafico26 <- ggplot(query, aes(y=NOMBRE, x=CANTIDAD_CARNES, fill=NOMBRE))+ 
+                    geom_bar(stat="identity",width = 0.2,show.legend = FALSE) + 
+                    labs(y='Universidades', x='Carnes', 
+                        title='Universidades que sí superan el promedio de carnes')
+grafico26
+# Interpretacion: Estas son las univeridades que cuentan con mas del promedio de carnes ademas de estar licenciadas. Se puede ver
+# como la UPC es la que mas tiene con mas de 70000 carnes, luego le sigue la UTP y por ultimo la PUCP.
+
+# 27- Universidades con menos de 100 programas en total
+aux2 <- resumen_sunedu %>% select(NOMBRE, PROGRAMAS_TOTAL) %>% filter(PROGRAMAS_TOTAL <= 100)
+grafico7 <- ggplot(aux2, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE)) + theme_minimal()+
+                    geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + 
+                    labs(y='Universidades',x='Programas', title='Universidades con menos de 100 programas en total')
+grafico7
+# Interpretacion: Se realizó este grafico para poder ver mas a detalle a las universidades con menos de 100 programas ya que en el original
+# no se alcanza a ver bien. Se puede ver como incluso hay universidades licenciadas que tienen menos de 10 programas, como Universidad Jaime
+# Bausate y Meza.
+
 
 
 #############################################################
