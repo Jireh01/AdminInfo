@@ -266,10 +266,10 @@ grafico26
 
 # 27- Universidades con menos de 100 programas en total
 aux2 <- resumen_sunedu %>% select(NOMBRE, PROGRAMAS_TOTAL) %>% filter(PROGRAMAS_TOTAL <= 100)
-grafico7 <- ggplot(aux2, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE)) + theme_minimal()+
+grafico27 <- ggplot(aux2, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE)) + theme_minimal()+
                     geom_bar(stat="identity",width = 0.8,show.legend = FALSE) + 
                     labs(y='Universidades',x='Programas', title='Universidades con menos de 100 programas en total')
-grafico7
+grafico27
 # Interpretacion: Se realizó este grafico para poder ver mas a detalle a las universidades con menos de 100 programas ya que en el original
 # no se alcanza a ver bien. Se puede ver como incluso hay universidades licenciadas que tienen menos de 10 programas, como Universidad Jaime
 # Bausate y Meza.
