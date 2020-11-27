@@ -308,11 +308,14 @@ grafico2 <- ggplot(licenciamiento, aes(x='', y=ESTADO_LICENCIAMIENTO, fill=ESTAD
 grafico2
 # Interpretacion: Muestra un pie con los percentajes de las licencias otorgadas (o denegadas) a las Universidades segun la SUNEDU
 
+# Cantidad de universidades por departamento
 grafico4 <- ggplot(licenciamiento, aes(x=DEPARTAMENTO_LOCAL, y='', fill=DEPARTAMENTO_LOCAL)) + 
                 geom_bar(stat='identity', color='white') + coord_polar(theta='x') + 
                  labs(y='',x='Departamentos', 
                         title='Universidades según departamento')
 grafico4
+# Interpretacion: Se puede ver como LIMA supera al resto con bastante diferencia, lo cual tiene sentido al ser la capital.
+
 
 # 7- Cantidad de programas por Universidad 
 aux2 <- resumen_sunedu %>% group_by(NOMBRE) %>% summarise(suma_programas = sum(PROGRAMAS_TOTAL))
