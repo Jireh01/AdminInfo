@@ -159,7 +159,8 @@ grafico14 <- ggplot(query, aes(y=NOMBRE, x=PROGRAMAS_TOTAL, fill=NOMBRE))+
                     labs(y='Universidades', x='Programas', 
                         title='Universidades con mas del promedio de programas')
 grafico14
-# Interpretacion: Universidades que tienen mas del promedio de programas, se puede ver que la cayetano gana por casi 700.
+# Interpretacion: Universidades que tienen mas del promedio de programas, se puede ver que la cayetano gana por casi 700. Luego le sigue la UTP
+# con mas de 450 
 
 
 # 15- Universidades que tienen menos del promedio de carnes
@@ -172,7 +173,8 @@ grafico15 <- ggplot(query, aes(y=NOMBRE, x=CANTIDAD_CARNES, fill=NOMBRE))+
                         title='Universidades que no superan el promedio de carnes')
 grafico15
 # Interpretacion: Univesidades que tienen menos del promedio de carnes, puede ver como la cayetano supera a los demas por también
-# Por 700 carnes, El promedio es 10000 aproximadamente
+# Por 700 carnes, El promedio es 10000 aproximadamente. Asimismo, se puede ver como hay algunas universidades como la Universidad La Sale que
+# a penas supera el promedio
 
 # 16- Histograma de periodo de frecuencia de licenciamiento
 grafico16 <- ggplot(licenciamiento, aes(PERIODO_LICENCIAMIENTO)) + 
@@ -201,23 +203,23 @@ grafico18
 
 # 19- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
 # Sin outliers
-boxplot(resumen_sunedu$CANTIDAD_CARNES, 
+grafico19 <- boxplot(resumen_sunedu$CANTIDAD_CARNES, 
         outline = FALSE, col='green', horizontal = TRUE, ylab="Cantidad de Carnes")
 
 # 20- Diagrama de cajas para los programas totales y la cantidad de carnes para las universidades licenciadas
 # Sin outliers
-boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
+grafico20 <- boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
         outline = FALSE, col='yellow', horizontal = TRUE, ylab="Cantidad de Programas")
 # Interpretacion: Programas y carnes Con outliers con diagrama de bloque
 
 # 21- Diagrama de cajas para la cantidad de carnes para las universidades licenciadas
 # Con outliers
-boxplot(resumen_sunedu$CANTIDAD_CARNES,
+grafico21 <- boxplot(resumen_sunedu$CANTIDAD_CARNES,
          col='blue', horizontal = TRUE, outliers = TRUE, ylab='Cantidad de Carnes')
 
 # 22- Diagrama de cajas para los programas totales para las universidades licenciadas 
 # Con outliers
-boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
+grafico22 <- boxplot(resumen_sunedu$PROGRAMAS_TOTAL, 
         col='red', horizontal = TRUE, outliers = TRUE, ylab='Cantidad de Programas')
 # Interpretacion: Programas y carnes sin outliers  con diagrama de bloque
 # Se puede ver como la cantidad de carnes es la que cuenta con mas outliers y con cantidad de 6 outliers
