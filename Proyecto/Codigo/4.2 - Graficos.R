@@ -274,6 +274,20 @@ grafico27
 # no se alcanza a ver bien. Se puede ver como incluso hay universidades licenciadas que tienen menos de 10 programas, como Universidad Jaime
 # Bausate y Meza.
 
+# 28- Numero de estudiantes por departamento sin contar LIMA para poder analizar mejor los demas departamentos
+query <- carnes %>%
+                group_by(DEPARTAMENTO_FILIAL) %>%
+                summarize(CANTIDAD = sum(Cant_Carnes)) %>%
+                filter(DEPARTAMENTO_FILIAL != 'LIMA')
+grafico28 <- ggplot(query, aes(x=CANTIDAD, y=DEPARTAMENTO_FILIAL, fill=DEPARTAMENTO_FILIAL)) + 
+                    geom_bar(stat="identity",width = 0.4,show.legend = FALSE) + 
+                    labs(y='Departamento', x='Estudiantes', 
+                        title='Numero de estudiantes en cada departamento (sin contar LIMA)')
+grafico28
+# Interpretacion: Se puede ver como Arquipa es el segundo (contado LIMA) con mas de 70000. Pero además el que tiene menor numero es Amazonas
+# que cuenta con menos de 200 estudiantes en todo el departamento.
+
+
 
 
 #############################################################
