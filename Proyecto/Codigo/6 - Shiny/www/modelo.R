@@ -21,3 +21,4 @@ modelo<-{
              verbatimTextOutput("modelo7"),plotOutput("plot7"),
              verbatimTextOutput("texto7")))
 }
+

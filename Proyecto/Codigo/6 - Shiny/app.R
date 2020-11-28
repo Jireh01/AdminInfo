@@ -10,12 +10,17 @@ library("plotly")#para graficos dinamicos
 library("shinythemes")
 library("ade4")
 
+## Renzo
+#setwd("D:/Renxzen/Documentos/UPC/2020-02/Admin Info/TF/Trabajo-Final-Adminfo/Proyecto/Codigo/6 - Shiny")
+
 source("www/inicio.R")
 source("www/recoleccion.R")
 source("www/querys.R")
 source("www/graficos.R")
 source("www/informe.R")
 source("www/modelo.R")
+source("www/consultas.R")
+source("tables.R")
 
 
 ui <- fluidPage(
@@ -24,18 +29,13 @@ ui <- fluidPage(
                tabPanel("Inicio",inicio),
                tabPanel("Recoleccion", recoleccion), 
                tabPanel("Preprocesamiento", querys),
-               tabPanel("Gráficos", graficos),
+               #tabPanel("Consultas", consultas),
+               tabPanel("Graficos", graficos),
                tabPanel("Modelo", modelo),
                tabPanel("Informe", informe))
 )
 
 server <- function(input, output) {
-    vinos<-read.csv("winequality-red.csv")
-    carnes<-read.csv("carnes.csv")
-    licenciamiento<-read.csv("licenciamiento.csv")
-    resumen_sunedu<-read.csv("resumen_sunedu.csv")
-    programa<-read.csv("programas.csv")
-    
     output$idTabla1 <- renderTable({
         file <- input$idArchivo
         read.csv(file$datapath)
@@ -423,8 +423,7 @@ server <- function(input, output) {
     
     output$plot5 <- DT::renderDataTable({
         
-        prueba
-        
+        regresionPolinomial
         
     })
     
@@ -491,65 +490,65 @@ s.corcircle(componentes[,c(1,1)])'
     })
     
     #modelo7
-    output$modelo7 <- renderText({
-        'x <- vinos$citric.acid 
-y <- vinos$density 
-
-dataframe = data.frame(x, y)
-
-etiquetar <- function(dataframe) {
-     grupos <- c()
-     for (i in 1:NROW(dataframe)) {
-          if(dataframe$x[i]>=min(dataframe$x) & dataframe$x[i]<(max(dataframe$x)*0.4)) {
-               grupos <- c(grupos,A)
-          }
-          else if(dataframe$x[i]>=(max(dataframe$x)*0.4) & dataframe$x[i]<(max(dataframe$x)*0.6)) {
-               grupos <- c(grupos, B)
-          }
-          else grupos <- c(grupos, C)
-     }
-     dataframe <- cbind(dataframe, grupos)
-     return(dataframe)
-}
-dataframe = etiquetar(dataframe)
-head(dataframe)
-
-ggplot(data = dataframe,aes(x=dataframe$x,y=dataframe$y,color=dataframe$grupos))+
-     geom_point()+xlab(X)+ylab(Y)+ggtitle(Clasificador KNN)
-
-# sacar el 70% y el 30% para entrenamiento y testeo respectivamente
-ids=sample(1:nrow(dataframe),size=nrow(dataframe)*0.7,replace = FALSE)
-
-Entrenamiento<-dataframe[ids,]
-Test<-dataframe[-ids,]
-
-ggplot(data = Entrenamiento ,aes(x=x,y=y,color=grupos))+
-     geom_point()+xlab(X)+ylab(Y)+ggtitle(Clasificador KNN)
-
-dataframe.temporal = dataframe
-
-knn <- function(dataframe.temporal, nuevoX, nuevoY, k, metodo) {
-     if (metodo == 1) {
-          d <- (abs(nuevoX-dataframe.temporal$x)-abs(nuevoY-dataframe.temporal$y))
-     } else {
-          d <- sqrt((nuevoX-dataframe.temporal$x)^2 + (nuevoY-dataframe.temporal$y)^2)
-     }
-     dataframe.temporal <- cbind(dataframe.temporal, d)
-     vOrden <- sort(dataframe.temporal$d)
-     vecinos <- dataframe.temporal[dataframe.temporal$d %in% vOrden[1:k],3]
-     return (vecinos[1:k])
-}
-v <- knn(dataframe, 7, 13, 1332, 1)
-porc<-function(vector,value) {
-     return (sum(as.integer(vector==value)))
-}
-a<-porc(v,A)
-b<-porc(v,B)
-c<-porc(v,C)
-total<-(a+b+c)
-a*100/total
-b*100/total
-c*100/total'
+    output$modelo7 <- renderText({'
+            x <- vinos$citric.acid 
+            y <- vinos$density 
+            
+            dataframe = data.frame(x, y)
+            
+            etiquetar <- function(dataframe) {
+                 grupos <- c()
+                 for (i in 1:NROW(dataframe)) {
+                      if(dataframe$x[i]>=min(dataframe$x) & dataframe$x[i]<(max(dataframe$x)*0.4)) {
+                           grupos <- c(grupos,A)
+                      }
+                      else if(dataframe$x[i]>=(max(dataframe$x)*0.4) & dataframe$x[i]<(max(dataframe$x)*0.6)) {
+                           grupos <- c(grupos, B)
+                      }
+                      else grupos <- c(grupos, C)
+                 }
+                 dataframe <- cbind(dataframe, grupos)
+                 return(dataframe)
+            }
+            dataframe = etiquetar(dataframe)
+            head(dataframe)
+            
+            ggplot(data = dataframe,aes(x=dataframe$x,y=dataframe$y,color=dataframe$grupos))+
+                 geom_point()+xlab(X)+ylab(Y)+ggtitle(Clasificador KNN)
+            
+            # sacar el 70% y el 30% para entrenamiento y testeo respectivamente
+            ids=sample(1:nrow(dataframe),size=nrow(dataframe)*0.7,replace = FALSE)
+            
+            Entrenamiento<-dataframe[ids,]
+            Test<-dataframe[-ids,]
+            
+            ggplot(data = Entrenamiento ,aes(x=x,y=y,color=grupos))+
+                 geom_point()+xlab(X)+ylab(Y)+ggtitle(Clasificador KNN)
+            
+            dataframe.temporal = dataframe
+            
+            knn <- function(dataframe.temporal, nuevoX, nuevoY, k, metodo) {
+                 if (metodo == 1) {
+                      d <- (abs(nuevoX-dataframe.temporal$x)-abs(nuevoY-dataframe.temporal$y))
+                 } else {
+                      d <- sqrt((nuevoX-dataframe.temporal$x)^2 + (nuevoY-dataframe.temporal$y)^2)
+                 }
+                 dataframe.temporal <- cbind(dataframe.temporal, d)
+                 vOrden <- sort(dataframe.temporal$d)
+                 vecinos <- dataframe.temporal[dataframe.temporal$d %in% vOrden[1:k],3]
+                 return (vecinos[1:k])
+            }
+            v <- knn(dataframe, 7, 13, 1332, 1)
+            porc<-function(vector,value) {
+                 return (sum(as.integer(vector==value)))
+            }
+            a<-porc(v,A)
+            b<-porc(v,B)
+            c<-porc(v,C)
+            total<-(a+b+c)
+            a*100/total
+            b*100/total
+            c*100/total'
         
     })
     
@@ -619,7 +618,52 @@ c*100/total'
         Para cambiar los valores y los cluster, solo modifique los x e y del dataframe y el numero en la funcion kmeans'
         
     })
-        
+    
+    ################## Consultas
+    
+    
+    ### Estadisticas Programas
+    
+    
+    
+    ### Query 1
+    output$query1Texto1 <- renderText({
+        '1. Lista de universidades que tienen programas de Doctorado que se encuentren
+        licenciadas segun la lista de licenciamiento de Abril del 2020. Mostrar tambien
+        la cantidad de programas y alumnos que tiene cada una respectivamente.'
+    })
+    
+    output$query1Texto2 <- renderText({
+        'query <- programas %>%
+					filter(NIVEL_ACADEMICO == "DOCTORADO") %>%
+					group_by(NOMBRE,NIVEL_ACADEMICO) %>%
+					summarize(PROGRAMAS = n()) %>%
+					inner_join(licenciamiento %>%
+											filter(ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+											select(NOMBRE, ESTADO_LICENCIAMIENTO),
+								by=c("NOMBRE"="NOMBRE")) %>%
+					inner_join(carnes %>%
+										group_by(NOMBRE_UNIVERSIDAD) %>%
+										summarize(CANTIDAD_CARNES = sum(Cant_Carnes)),
+								by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+					select(NOMBRE, NIVEL_ACADEMICO, ESTADO_LICENCIAMIENTO, PROGRAMAS, ALUMNOS = CANTIDAD_CARNES)'
+    })
+    
+    
+    output$tablaQuery1 <- DT::renderDataTable({ query1 })
+    
+    
+    
+    output$textoEstaPrograma1 <- renderText({
+        'CONSULTA'
+    })
+    output$textoEstaPrograma1 <- renderText({
+        'CODIGO'
+    })
+    output$dataframe <- DT::renderDataTable({ mtcars })
+    
+    
+    
 
 }
 
