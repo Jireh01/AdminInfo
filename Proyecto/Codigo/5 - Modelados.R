@@ -21,7 +21,10 @@ plot(vinos$density, vinos$fixed.acidity)
 abline(R, col="red", lwd=2)
 
 # Interpretación: Usamos la función de lm() para saber la regresión lineal de 2 variables (he ahi "lineal") luego ploetamos las variables solas
-# y por ultimo dibujamos la linea de la regresion usando la función creada anteriormente llamada R
+# y por ultimo dibujamos la linea de la regresion usando la función creada anteriormente llamada R. Se puede ver como a mayor densidad que tiene
+# el vino, tiende a tener mayor acidez. Esto se puede deber a que naturalmente al vino tener mas densidad, es decir, pesr más, su nivel de 
+# acidez elevará para manteren la proporción. Cabe resaltar que siempre hay diferencias, ya que depende mucho del vino. Nuestra regresión trata
+# de predecir esa proporcionalidad. 
 
 
 ##########################################################
@@ -82,9 +85,9 @@ accuracy.fin
 # el margen de error, que en este caso es alto, con 59.58%. Lo recomendado es entre 80% y 95% 
 
 
-#############################################
-################### KMeans ##################
-#############################################
+##############################################
+################### KMeans ###################
+##############################################
 
 corrplot(v)
 plot(vinos$free.sulfur.dioxide, vinos$sulphates)
@@ -140,7 +143,7 @@ s.corcircle(componentes[,c(1,1)])
 library(ggplot2)
 NROW(vinos) 
 view(vinos)
-x <- resumen_sunedu # cambiar variables en el shiny
+x <- vinos$citric.acid # cambiar variables en el shiny
 y <- vinos$density # cambiar variables en el shiny
 
 dataframe = data.frame(x, y)
