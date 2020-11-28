@@ -1,10 +1,10 @@
 informe<-{
   fluidRow(
-    column(12,align="left",h3("UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS - UPC"),
+    column(12,align="center",h3("UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS - UPC"),
            tags$b(h4("Trabajo Final de Administracion de la Informacion")),
            tags$img(src="upc.png", width="10%")),
     div(
-      column(12,align="left",br(),h3("Tema Coyuntural"),
+      column(12,align="center",br(),h3("Tema Coyuntural"),
              h4("En el Peru, la educacion es algo muy importante y que lamentablemente, conseguir una de buena calidad es dificil. 
                Dias antes de comenzar el trabajo final, algunas universidades comenzaron a reclamarle a la SUNEDU sobre su licencia,
                ya que muchas habian sido denegadas por la misma. Nos parecio un tema muy interesante y de indole importante para el pais.
@@ -14,7 +14,7 @@ informe<-{
                que termina ese curso/programa. El ultimo dataset es sobre los carnes que tienen las universidades por curso.
                Los tres datasets se juntarán tomando en cuenta el dataset de licenciamiento, ya que no solo es el mas importante,
                sino tambien el mas actualizado de los 3, por lo que sera esencial guiarse de ese.")),
-      column(12,align="left",br(),h3("Descripcion del Proyecto"),
+      column(12,align="center",br(),h3("Descripcion del Proyecto"),
              h4("El siguiente trabajo contara con Datasets originales del gobierno del Peru, cuyos daots han sido recolectados en los ultimos meses.
                 Se realizara diversas consultas a esta base de datos para poder obtener informacion precisa y concisa. Por otro lado, 
                 nos guiaremos de graficos para poder entender y manejar la informacion de una manera mas facil.
@@ -23,7 +23,7 @@ informe<-{
                 En su defecto, usaremos una base de datos de Calidad de Vinos sacada de la pagina de Kaggle, la cual tiene datos 
                 optimos para poder realizar los modelamientos planteados.")),
       
-      column(12, align="left", br(),h3("Procedimiento"),
+      column(12, align="center", br(),h3("Procedimiento"),
              h4("Se ha recolectado los datos de https://www.datosabiertos.gob.pe/.Cave recalcar que para la recoleccion se han 
              descargado fuentes de tipo csv y excel. UNa vez realizado esto, se han preprocesado los valores, se han quitado
                 tildes, se han removido los espacios en blanco y reemplazados con N/A, se uniformizado los nombres de as variables, se han removido las columnas innecesarias
@@ -58,7 +58,7 @@ informe<-{
                 consultar modelados.R")),
       column(12,align="left",tags$img(src="010.jpg",width="50%")),
       column(12,align="right",tags$img(src="009.jpg",width="50%")),
-      column(12, align="left", br(),h3("Conclusiones"),
+      column(12, align="center", br(),h3("Conclusiones"),
              h4("Hemos podido observar que existen diferentes modelos que nos pueden ayudar a manejar la informacion. Debemos tener en cuenta que no todos
                 los datasets se prestan para hacer todo tipo de modelado, si bien es cierto, se pueden realizar varias consultas en los datasets descargados
                 del gobierno, no se pueden aplicar modelos predictivos en este, por ello es que solo se ha utilizado para la parte de recoleccion de la informacion.
@@ -67,7 +67,7 @@ informe<-{
                 de poder realizar querys y consultas, siempre tomando en cuenta que otra persona puede leer la informacion rescatada y la tiene que entender.
                 Finalmente, se puede observar que con Datasets que se presten a modelos predictivos se pueden hacer variedades de cosas. Se sabe que mas adelante
                 se va a llevar un curso de Machine Learning, pero con el, capaz, poco concimiento que tenemos ahora se pueden hacer infinidad de cosas.")),
-      column(12, align="left", br(),h3("Agradecimientos"),
+      column(12, align="center", br(),h3("Agradecimientos"),
              h4("Agradecemos al profesor WALTER CUEVA por habernos guiado en todo este trayecto del ciclo que, a pesar de pequeños tropezones que se
                 ha podido dar en todo este tiempo, ha sabido tratar a sus alumnos con sabiduria e inteligencia.
                 Gracias profesor.
