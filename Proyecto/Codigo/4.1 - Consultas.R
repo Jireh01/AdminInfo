@@ -18,7 +18,7 @@ estadistica_programas <- resumen_sunedu %>% summarise(Cantidad = n(),
 			Q75 = quantile(PROGRAMAS_TOTAL, .75, na.rm = TRUE),)
 estadistica_programas
 
-# Media, Maximo, Minimo, Cuartil y Percentil de los Programas Universitarios en total de cada universidad
+# Media, Maximo, Minimo, Cuartil y Percentil de los Carnes Universitarios en total de cada universidad
 estadistica_carnes <- resumen_sunedu %>% summarise(Cantidad = n(),
 			Media = mean(CANTIDAD_CARNES, na.rm = TRUE),
 			Maximo = max(CANTIDAD_CARNES, na.rm = TRUE),
