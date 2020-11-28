@@ -140,7 +140,7 @@ s.corcircle(componentes[,c(1,1)])
 library(ggplot2)
 NROW(vinos) 
 view(vinos)
-x <- resumen_sunedu # cambiar variables en el shiny
+x <- vinos$citric.acid # cambiar variables en el shiny
 y <- vinos$density # cambiar variables en el shiny
 
 dataframe = data.frame(x, y)
