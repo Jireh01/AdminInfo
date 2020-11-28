@@ -9,7 +9,7 @@
 
 # Informe
 
-### El informe se encuentra en la aplicacion de Shiny. En el area de INFORME. Adicionalmente tambien se puede leer en el archivo www/informe.r
+### El informe se encuentra en la aplicacion de Shiny. En el area de INFORME. Adicionalmente tambien se puede leer en el archivo Proyecto/codigo/6-Shiny/www/informe.r
 
 
 # AWS con la base de datos
