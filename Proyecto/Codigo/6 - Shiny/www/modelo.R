@@ -1,3 +1,4 @@
+library(DT)
 modelo<-{
   navlistPanel( 
     tabPanel("KMEANS",h4("KMEANS"),hr(),
@@ -9,7 +10,7 @@ modelo<-{
              verbatimTextOutput("texto4")),
     
     tabPanel("REGRESION POLINOMIAL",h4("REGRESION POLINOMIAL"),hr(),
-             verbatimTextOutput("modelo5"),dataTableOutput("plot5"),
+             verbatimTextOutput("modelo5"),DT::dataTableOutput("plot5"),
              verbatimTextOutput("texto5")),
     
     tabPanel("PCA",h4("PCA"),hr(),
@@ -20,3 +21,4 @@ modelo<-{
              verbatimTextOutput("modelo7"),plotOutput("plot7"),
              verbatimTextOutput("texto7")))
 }
+
