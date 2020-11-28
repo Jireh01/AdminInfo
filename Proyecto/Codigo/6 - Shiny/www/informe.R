@@ -2,7 +2,7 @@ informe<-{
   fluidRow(
     column(12,align="center",h3("UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS - UPC"),
            tags$b(h4("Trabajo Final de Administracion de la Informacion")),
-           tags$img(src="upc.png", width="10%")),
+           tags$img(src="img/upc.png", width="10%")),
     div(
       column(12,align="Left",br(),h3("Tema Coyuntural"),
              h4("En el Peru, la educacion es algo muy importante y que lamentablemente, conseguir una de buena calidad es dificil. 
@@ -12,7 +12,7 @@ informe<-{
                El primero sobre los licenciamientos, su periodo, las universidades, donde quedaban.
                El segundo datasets fue sobre los programas o cursos que las universidades brindaban, asi como postgrado, y el nivel con el
                que termina ese curso/programa. El ultimo dataset es sobre los carnes que tienen las universidades por curso.
-               Los tres datasets se juntarán tomando en cuenta el dataset de licenciamiento, ya que no solo es el mas importante,
+               Los tres datasets se juntaran tomando en cuenta el dataset de licenciamiento, ya que no solo es el mas importante,
                sino tambien el mas actualizado de los 3, por lo que sera esencial guiarse de ese.")),
       column(12,align="Left",br(),h3("Descripcion del Proyecto"),
              h4("El siguiente trabajo contara con Datasets originales del gobierno del Peru, cuyos daots han sido recolectados en los ultimos meses.
@@ -29,10 +29,12 @@ informe<-{
                 tildes, se han removido los espacios en blanco y reemplazados con N/A, se uniformizado los nombres de as variables, se han removido las columnas innecesarias
                 y se ha convertido los string a enteros. Por ultimo, se han guardado los 3 Dataset ya preprocesados y se han guardado en un formato csv, 
                 esto debido a que deseamos que sea homogeneo.
+                
                 Una vez obtenido estos nuevos csv se ha pasado a la exploracion y transforamcion de los datasets. Como se menciono en la introduccion, lo que se
                 busca es uniformar los 3 dataset y formar uno con las licencias actualziadas, por lo que se ha agarrado las 3 dataset y se ha realziado un Inner_join
                 para que al final nos quedemos con las columnas deseadas como nombre, numero de programas y cantidad de carnets.
                 Una vez realziado esto, se ha creado el ultimo dataet con los licenciamientos actualizados.
+                
                 Finalmente, pasamos a las consultas. En estas se abarcaron diferentes conceptos realizados en clase. Tenemos consultas en las que se ha 
                 sacado precentiles, media, maximo y minimo. En otras hemos usado el select y filter para un mejor manejo de datos. Todas las consultas de datos que se han realizado
                 han sido con el proposito de poder manjear la informacion de forma mas facil y sencilla. Estas consultas van desde lo mas basico hasta lo 
@@ -40,7 +42,7 @@ informe<-{
                 Entre estos diagramas utilizados estan los de barra, dispercion, caja y pie. Estos graficos, al igual que las consultas, van en aumento de complejidad.
                 En la parte de los modelados, como se ha mencionado en la presentacionm, nuestro dataset no era apto para realizar estos modelados. Por ello, se consulto
                 al docente si se podia realizar esto con un dataset externo, a lo que el afirmo. El primer modelo realizado fue la regresion lineal, a esta se 
-                utilizola funcion lm, que esta integrada dentro de R. Esta nos ha permitido dibujar la linea de regresion en un eje x vs y. Después, se vio la regresion
+                utilizola funcion lm, que esta integrada dentro de R. Esta nos ha permitido dibujar la linea de regresion en un eje x vs y. Despues, se vio la regresion
                 polinomial, esta regresion no se puede greaficar debido a que al ser tres variables se tenia que dibujar en 3D y al ser 4, en 4D. En el proyecto, se ha utilizado
                 una variable con respecto a otras tres. Una vez hecho esto utilizamos la funcion predict, incorporada en R, para poder, valga la redundancia, predecir
                 el resultado con el dataset entrenado anteriormente. Por ultimo, se calcula la accuracy del algoritmo. El siguiente modelo es el KNN. 
@@ -53,11 +55,12 @@ informe<-{
                 dicho modelo de Machine Learning, luego le pasamos el dataframe, el kernel, que en este caso es linear o radial y por ultimo el 
                 costume, que puede variar. Luego, simplemente, ploteamos, utilizando la funcion creada SVM y el dataframe.
                 Adicionalmente, en el .R del github se encuentra un modelo de Machine Learning adicional de SVM.
+                
                 KN2.0, este KN se incorporo siguiendo el modelo del profesor, la diferencia es que se ha tratado de generalizar el x para que pueda
                 aceptar cualqueir largo maximo y minimo, asi no tiene que se especificado manualmente cada vez que se cambie el x. Para mas informacion
                 consultar modelados.R")),
-      column(12,align="Left",tags$img(src="010.jpg",width="50%")),
-      column(12,align="Left",tags$img(src="009.jpg",width="50%")),
+      column(12,align="Left",tags$img(src="img/010.jpg",width="50%")),
+      column(12,align="Left",tags$img(src="img/009.jpg",width="50%")),
       column(12, align="Left", br(),h3("Conclusiones"),
              h4("Hemos podido observar que existen diferentes modelos que nos pueden ayudar a manejar la informacion. Debemos tener en cuenta que no todos
                 los datasets se prestan para hacer todo tipo de modelado, si bien es cierto, se pueden realizar varias consultas en los datasets descargados

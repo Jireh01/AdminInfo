@@ -22,13 +22,13 @@ inicio<-{
                 Datasets mencionados previamente debido a que no cuentan con datos continuos que nos permiten realizar estos ejercicios.
                 En su defecto, usaremos una base de datos de Calidad de Vinos sacada de la pagina de Kaggle, la cual tiene datos 
                 optimos para poder realizar los modelamientos planteados.")),
-      column(12,aling="left",br(),h3("INTEGRANTES")),
-      column(12,aling="left",h2("Francesco Bassino")),
-      column(12,align="left",tags$img(src="img/francescco.jpg",width="10%")),
-      column(12,aling="left",h2("Jireh Ferroa")),
-      column(12,align="left",tags$img(src="img/jireh.jpg",width="10%")),
-      column(12,aling="left",h3("Renzo Mondragon")),
-      column(12,align="left",tags$img(src="img/renzo.jpg",width="10%"))                
+      column(12,aling="center",br(),h3("INTEGRANTES")),
+      column(12,aling="center",h2("Francesco Bassino")),
+      column(12,align="center",tags$img(src="img/francescco.jpg",width="10%")),
+      column(12,aling="center",h2("Jireh Ferroa")),
+      column(12,align="center",tags$img(src="img/jireh.jpg",width="10%")),
+      column(12,aling="center",h3("Renzo Mondragon")),
+      column(12,align="center",tags$img(src="img/renzo.jpg",width="10%"))                
       
     )
     
