@@ -2,7 +2,7 @@
 library(tidyverse)
 library(dplyr)
 
-## TRANSFORMACION
+## GENERACION DEL INFORME AUTOMATICO
 
 # Cargamos los datasets preprocesados
 licenciamiento <- read.csv("Datasets/2-Preprocesados/licenciamiento.csv")

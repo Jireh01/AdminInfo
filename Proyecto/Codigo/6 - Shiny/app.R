@@ -1,4 +1,3 @@
-library("shiny")
 library("ggplot2")
 library("shinyjs")#para la funcion toggle
 library("shiny")
