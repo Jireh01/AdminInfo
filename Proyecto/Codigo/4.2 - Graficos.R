@@ -2,7 +2,7 @@ library(ggplot2)
 #install.packages("plotly")
 library(plotly)
 library(dplyr)
-
+#Francescco y Renzo 
 # Cargamos los data.frames
 licenciamiento <- read.csv("Datasets/2-Preprocesados/licenciamiento.csv")
 carnes <- read.csv("Datasets/2-Preprocesados/carnes.csv")
