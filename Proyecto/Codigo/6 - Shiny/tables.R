@@ -18,6 +18,24 @@ regresionPolinomial$prediccion <- predict(ft, regresionPolinomial)
 ####### QUERIES ###########
 ###########################
 
+# Estadisticas Programas 
+estadisticaProgramasTabla <- resumen_sunedu %>% summarise(Cantidad = n(),
+		Media = mean(PROGRAMAS_TOTAL, na.rm = TRUE),
+		Maximo = max(PROGRAMAS_TOTAL, na.rm = TRUE),
+		Minimo = min(PROGRAMAS_TOTAL, na.rm = TRUE),
+		Q25 = quantile(PROGRAMAS_TOTAL, .25, na.rm = TRUE),
+		Q50 = quantile(PROGRAMAS_TOTAL, .50, na.rm = TRUE),
+		Q75 = quantile(PROGRAMAS_TOTAL, .75, na.rm = TRUE),)
+
+# Estadisticas Carnes
+estadisticaCarnesTabla <- resumen_sunedu %>% summarise(Cantidad = n(),
+			Media = mean(CANTIDAD_CARNES, na.rm = TRUE),
+			Maximo = max(CANTIDAD_CARNES, na.rm = TRUE),
+			Minimo = min(CANTIDAD_CARNES, na.rm = TRUE),
+			Q25 = quantile(CANTIDAD_CARNES, .25, na.rm = TRUE),
+			Q50 = quantile(CANTIDAD_CARNES, .50, na.rm = TRUE),
+			Q75 = quantile(CANTIDAD_CARNES, .75, na.rm = TRUE),)
+
 # QUERY 1
 query1 <- programas %>%
 	filter(NIVEL_ACADEMICO == "DOCTORADO") %>%

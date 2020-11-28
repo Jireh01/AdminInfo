@@ -2,7 +2,7 @@ inicio<-{
   fluidRow(
     column(12,align="center",h3("UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS - UPC"),
            tags$b(h4("Trabajo Final de Administracion de la Informacion")),
-           tags$img(src="www/upc.png", width="10%")),
+           tags$img(src="img/upc.png", width="10%")),
     div(
       column(12,align="center",br(),h3("Tema Coyuntural"),
              h4("En el Peru, la educacion es algo muy importante y que lamentablemente, conseguir una de buena calidad es dificil. 
@@ -23,12 +23,12 @@ inicio<-{
                 En su defecto, usaremos una base de datos de Calidad de Vinos sacada de la pagina de Kaggle, la cual tiene datos 
                 optimos para poder realizar los modelamientos planteados.")),
       column(12,aling="left",br(),h3("INTEGRANTES")),
-      column(12,aling="left",h2("Francescco Bassino")),
-      column(12,align="left",tags$img(src="www/francescco.jpg",width="10%")),
+      column(12,aling="left",h2("Francesco Bassino")),
+      column(12,align="left",tags$img(src="img/francescco.jpg",width="10%")),
       column(12,aling="left",h2("Jireh Ferroa")),
-      column(12,align="left",tags$img(src="www/jireh.jpg",width="10%")),
+      column(12,align="left",tags$img(src="img/jireh.jpg",width="10%")),
       column(12,aling="left",h3("Renzo Mondragon")),
-      column(12,align="left",tags$img(src="www/renzo.jpg",width="10%"))                
+      column(12,align="left",tags$img(src="img/renzo.jpg",width="10%"))                
       
     )
     

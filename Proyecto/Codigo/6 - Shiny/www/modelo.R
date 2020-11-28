@@ -1,4 +1,4 @@
-library(DT)
+
 modelo<-{
   navlistPanel( 
     tabPanel("KMEANS",h4("KMEANS"),hr(),

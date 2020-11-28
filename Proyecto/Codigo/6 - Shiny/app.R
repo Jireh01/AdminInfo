@@ -9,6 +9,7 @@ library("sqldf")
 library("plotly")#para graficos dinamicos
 library("shinythemes")
 library("ade4")
+library("DT")
 
 ## Renzo
 #setwd("D:/Renxzen/Documentos/UPC/2020-02/Admin Info/TF/Trabajo-Final-Adminfo/Proyecto/Codigo/6 - Shiny")
@@ -29,7 +30,7 @@ ui <- fluidPage(
                tabPanel("Inicio",inicio),
                tabPanel("Recoleccion", recoleccion), 
                tabPanel("Preprocesamiento", querys),
-               #tabPanel("Consultas", consultas),
+               tabPanel("Consultas", navConsultas),
                tabPanel("Graficos", graficos),
                tabPanel("Modelo", modelo),
                tabPanel("Informe", informe))
@@ -619,11 +620,40 @@ s.corcircle(componentes[,c(1,1)])'
         
     })
     
-    ################## Consultas
     
     
+    ################## Consultas ###################################################### 
     ### Estadisticas Programas
+    output$textoEstaPrograma1 <- renderText({
+        '# Media, Maximo, Minimo, Cuartil y Percentil de los Programas Universitarios en total de cada universidad'
+    })
+    output$textoEstaPrograma2 <- renderText({
+        'estadistica_programas <- resumen_sunedu %>% summarise(Cantidad = n(),
+			Media = mean(PROGRAMAS_TOTAL, na.rm = TRUE),
+			Maximo = max(PROGRAMAS_TOTAL, na.rm = TRUE),
+			Minimo = min(PROGRAMAS_TOTAL, na.rm = TRUE),
+			Q25 = quantile(PROGRAMAS_TOTAL, .25, na.rm = TRUE),
+			Q50 = quantile(PROGRAMAS_TOTAL, .50, na.rm = TRUE),
+			Q75 = quantile(PROGRAMAS_TOTAL, .75, na.rm = TRUE),)'
+    })
+    output$tablaEstaPrograma <- DT::renderDataTable({ estadisticaProgramasTabla })
     
+    
+    ### Estadisticas Carnes
+    output$textoEstaCarne1 <- renderText({
+        '# Media, Maximo, Minimo, Cuartil y Percentil de los Carnes Universitarios en total de cada universidad'
+    })
+    output$textoEstaCarne2 <- renderText({
+        'estadistica_carnes <- resumen_sunedu %>% summarise(Cantidad = n(),
+			Media = mean(CANTIDAD_CARNES, na.rm = TRUE),
+			Maximo = max(CANTIDAD_CARNES, na.rm = TRUE),
+			Minimo = min(CANTIDAD_CARNES, na.rm = TRUE),
+			Q25 = quantile(CANTIDAD_CARNES, .25, na.rm = TRUE),
+			Q50 = quantile(CANTIDAD_CARNES, .50, na.rm = TRUE),
+			Q75 = quantile(CANTIDAD_CARNES, .75, na.rm = TRUE),)
+estadistica_carnes'
+    })
+    output$tablaEstaCarne <- DT::renderDataTable({ estadisticaCarnesTabla })
     
     
     ### Query 1
@@ -648,19 +678,162 @@ s.corcircle(componentes[,c(1,1)])'
 								by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
 					select(NOMBRE, NIVEL_ACADEMICO, ESTADO_LICENCIAMIENTO, PROGRAMAS, ALUMNOS = CANTIDAD_CARNES)'
     })
-    
-    
     output$tablaQuery1 <- DT::renderDataTable({ query1 })
     
     
+    ### Query 4
+    output$query4Texto1 <- renderText({
+        '# 4. Cantidad de universidades publicas que tienen licenciatura fuera de lima
+         #		y su cantidad respectiva de estudiantes que no sean de ingenieria ordenado de
+         #		mayor a menor cantidad de estudiantes'
+    })
+    output$query4Texto2 <- renderText({
+        'query <- licenciamiento %>% 
+						filter(TIPO_GESTION == "PUBLICO", 
+								ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA",
+								DEPARTAMENTO_LOCAL != "LIMA") %>%
+						select(NOMBRE,TIPO_GESTION,ESTADO_LICENCIAMIENTO,DEPARTAMENTO_LOCAL) %>%
+						inner_join(carnes %>%
+										filter(NOMBRE_CLASE_PROGRAMA != "SALUD")%>%
+										group_by(NOMBRE_UNIVERSIDAD, ) %>%
+										summarize(ESTUDIANTES = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						arrange(desc(ESTUDIANTES))'
+    })
+    output$tablaQuery4 <- DT::renderDataTable({ query4 })
     
-    output$textoEstaPrograma1 <- renderText({
-        'CONSULTA'
+    
+    ### Query 10
+    output$query10Texto1 <- renderText({
+        '# 10. Universidades privadas que tienen licenciamiento segun la lista de Abril 2020 y que tienen mas del
+        #		promedio de programas academicos. Mostrar el estado de licenciamiento y cantidad de programas
+        #		academicos. Tambien, ordenar por mayor cantidad de programas y como segunda prioridad alfabeticamente.'
     })
-    output$textoEstaPrograma1 <- renderText({
-        'CODIGO'
+    output$query10Texto2 <- renderText({
+        'query <- licenciamiento %>%
+						filter(TIPO_GESTION == "PRIVADO",
+							ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
+						inner_join(programas %>%
+											group_by(NOMBRE) %>%
+											summarize(PROGRAMAS = n()) %>%
+											filter(PROGRAMAS > mean(PROGRAMAS)),
+									by=c("NOMBRE"="NOMBRE")) %>%
+						arrange(desc(PROGRAMAS), NOMBRE)'
     })
-    output$dataframe <- DT::renderDataTable({ mtcars })
+    output$tablaQuery10 <- DT::renderDataTable({ query10 })
+    
+    ### Query 13
+    output$query13Texto1 <- renderText({
+        '# 13. Cantidad de estudiantes de universidades privadas en ICA'
+    })
+    output$query13Texto2 <- renderText({
+        'query <- licenciamiento %>%
+						filter(DEPARTAMENTO_LOCAL=="ICA",TIPO_GESTION=="PRIVADO") %>% 
+						select(NOMBRE) %>%
+						inner_join(carnes %>%
+											group_by(NOMBRE_UNIVERSIDAD) %>%
+											summarize(CANTIDAD_CARNES = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						select(CANTIDAD_ALUMNOS = CANTIDAD_CARNES)'
+    })
+    output$tablaQuery13 <- DT::renderDataTable({ query13 })
+    
+    ### Query 18
+    output$query18Texto1 <- renderText({
+        '# 18. Cantidad de alumnos de universidades cuyas licencias fueron revocadas'
+    })
+    output$query18Texto2 <- renderText({
+        'query <- licenciamiento %>%
+						select(NOMBRE,ESTADO_LICENCIAMIENTO) %>%
+						filter(ESTADO_LICENCIAMIENTO == "LICENCIA DENEGADA") %>%
+						inner_join(carnes %>%
+											group_by(NOMBRE_UNIVERSIDAD) %>%
+											summarize(CANTIDAD_ALUMNOS = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						summarize(TOTAL = sum(CANTIDAD_ALUMNOS))'
+    })
+    output$tablaQuery18 <- DT::renderDataTable({ query18 })
+    
+    ### Query 19
+    output$query19Texto1 <- renderText({
+        '#19. Departamento que mas universidades con licencia denegada tiene que no sea Lima'
+    })
+    output$query19Texto2 <- renderText({
+        'query <- licenciamiento %>% 
+						filter(DEPARTAMENTO_LOCAL != "LIMA", ESTADO_LICENCIAMIENTO!="LICENCIA OTORGADA") %>%
+						group_by(DEPARTAMENTO_LOCAL) %>%
+						summarize(UNIVERSIDADES = n()) %>%
+						filter(UNIVERSIDADES == first(licenciamiento %>% 
+												filter(DEPARTAMENTO_LOCAL != "LIMA",
+														ESTADO_LICENCIAMIENTO!="LICENCIA OTORGADA") %>%
+												group_by(DEPARTAMENTO_LOCAL) %>%
+												summarize(UNIVERSIDADES = n()) %>%
+												summarize (MAX = max(UNIVERSIDADES))))'
+    })
+    output$tablaQuery19 <- DT::renderDataTable({ query19 })
+    
+    ### Query 23
+    output$query23Texto1 <- renderText({
+        '#23. Lista de universidades licenciadas y la cantidad de sus estudiantes de cada departamento'
+    })
+    output$query23Texto2 <- renderText({
+        'query <- licenciamiento %>%
+						filter(ESTADO_LICENCIAMIENTO == "LICENCIA OTORGADA") %>%
+						select(NOMBRE,DEPARTAMENTO_LOCAL,ESTADO_LICENCIAMIENTO) %>%
+						inner_join(carnes %>%
+											group_by(NOMBRE_UNIVERSIDAD) %>%
+											summarize(ESTUDIANTES = sum(Cant_Carnes)),
+									by=c("NOMBRE"="NOMBRE_UNIVERSIDAD")) %>%
+						arrange(DEPARTAMENTO_LOCAL)'
+    })
+    output$tablaQuery23 <- DT::renderDataTable({ query23 })
+    
+    ### Query 25
+    output$query25Texto1 <- renderText({
+        '#25. Funcion para saber cuantos estudiantes en total tiene una universidad'
+    })
+    output$query25Texto2 <- renderText({
+        'alumnosTotal <-function(nombre){
+	query <- carnes %>%
+					filter(NOMBRE_UNIVERSIDAD == nombre) %>%
+					select(NOMBRE_UNIVERSIDAD, Cant_Carnes) %>%
+					group_by(NOMBRE_UNIVERSIDAD) %>%
+					summarize(n = sum(Cant_Carnes))
+	return(query)
+}
+query <- alumnosTotal("UNIVERSIDAD ALAS PERUANAS")
+query'
+    })
+    output$tablaQuery25 <- DT::renderDataTable({ query25 })
+    
+    ### Query 29
+    output$query29Texto1 <- renderText({
+        '#29. Cuantas universidades que se encuentran fuera de LIMA cuentan con programas postgrado, ordernar de manera descendiente'
+    })
+    output$query29Texto2 <- renderText({
+        'query <- programas %>%
+					select(NOMBRE, DEPARTAMENTO_LOCAL, TIPO_NIVEL_ACADEMICO) %>% 
+					filter(DEPARTAMENTO_LOCAL != "LIMA", TIPO_NIVEL_ACADEMICO == "POSGRADO") %>%
+					group_by(NOMBRE) %>% summarize(PROGRAMAS_TOTAL = n()) %>%
+					arrange(desc(PROGRAMAS_TOTAL))'
+    })
+    output$tablaQuery29 <- DT::renderDataTable({ query29 })
+    
+    ### Query 30
+    output$query30Texto1 <- renderText({
+        '# 30. Obtener la cantidad de programas academicos en cada tipo de nivel academico de las universidades,
+        #		ademas de tambien ordenarlo a ascendentemente segun el nombre y descendentemente la cantidad
+        #		de programas como segunda prioridad'
+    })
+    output$query30Texto2 <- renderText({
+        'query <- programas %>%
+					select(NOMBRE,NIVEL_ACADEMICO) %>%
+					group_by(NOMBRE,NIVEL_ACADEMICO) %>%
+					summarize(PROGRAMAS = n()) %>%
+					arrange(NOMBRE,desc(PROGRAMAS))'
+    })
+    output$tablaQuery30 <- DT::renderDataTable({ query30 })
     
     
     
